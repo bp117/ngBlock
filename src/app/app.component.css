@@ -1,4 +1,4 @@
-md-sidenav-layout.m2app-dark {
+md-sidenav-container.m2app-dark {
   background: black;
 }
 
@@ -13,6 +13,7 @@ md-sidenav-layout.m2app-dark {
 .app-sidenav {
   padding: 10px;
   min-width: 100px;
+   border: 1px solid rgba(0, 0, 0, 0.5);
 }
 
 .app-content md-checkbox {
@@ -70,4 +71,14 @@ md-sidenav-layout.m2app-dark {
 
 .app-progress {
   margin: 20px;
+}
+//added
+/* md-input-container:not(.md-input-invalid).md-input-focused .md-input {
+    border-color: your_color_here;
+} */
+md-sidenav-container {
+  background: #DCDCDC;
+}
+.example-full-width {
+  width: 100%;
 }

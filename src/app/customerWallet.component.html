@@ -1,0 +1,47 @@
+<form #customerForm="ngForm" (ngSubmit)="onSubmit(customerForm.value)">
+	<md-card>
+	<h1 class=".md-display-3">Customer Wallet</h1>
+	</md-card>
+
+	<div class="app-content">
+		<md-card>
+		<table class="example-full-width" cellspacing="0">
+			<tr>
+				<td><md-input-container>
+					<input mdInput placeholder="Available Balance" disabled
+						name="availableBalance" value={{balance}}> </md-input-container></td>
+			</tr>
+			<br />
+			<br />
+			<br />
+			<br />
+			<tr>
+				<td><md-select placeholder="Transaction Account" name="transactionAccount" (change)="change($event)" ngModel>
+				 <md-option 
+						*ngFor="let accType of accTypes" [value]="accType.value">
+					{{ accType.viewValue }} </md-option> </md-select> 
+					
+					
+					
+					<br /> <br /> <br /> <br /></td>
+			</tr>
+			<br />
+			<br />
+			<tr>
+				<td><md-input-container>
+					<input mdInput placeholder="Amount Transfer " name="amountTransfer" ngModel> </md-input-container></td>
+			</tr>
+			<br />
+			<br />
+			<br />
+			<br />
+			<tr>
+				<td>
+					<button md-button color="primary"
+						(click)=sendAmount(customerForm)>SEND</button>
+				</td>
+			</tr>
+		</table>
+		</md-card>
+	</div>
+</form>
