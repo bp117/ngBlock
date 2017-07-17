@@ -4,12 +4,12 @@ import { NgForm }  from '@angular/forms';
 
 
 @Component({
-  selector: 'material2-app-app',
+  selector: 'display-customer-modal',
   templateUrl: 'customerWallet.component.html',
   styleUrls: ['app.component.css'],
 })
-export class Material2AppAppComponent {
-        constructor(public dialog: MdDialog) {}
+export class CustomerFormComponent {
+        constructor(public dialogRef: MdDialogRef<CustomerFormComponent>) { }
        balance : any = 10000;    
  
       accTypes  = [
@@ -35,7 +35,9 @@ export class Material2AppAppComponent {
        console.log('Selected value is: ', value);
      }
     
-   
- 
+choosenEmoji: string;
+     confirmSelection() {
+    this.dialogRef.close(this.choosenEmoji);
+  }
 }
 

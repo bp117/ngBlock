@@ -1,0 +1,46 @@
+<form #insuranceForm="ngForm" (ngSubmit)="onSubmit(insuranceForm.value)">
+	<md-card>
+	<h1 class=".md-display-3">InsurenceForm</h1>
+	</md-card>
+
+	<div class="app-content">
+		<md-card>
+		<table class="example-full-width" cellspacing="0">			
+			<tr>
+				<td><md-select placeholder="State" name="state" (change)="getCountyList($item)" ngModel>
+				 <md-option 
+						*ngFor="let state of states" [value]="state.value">
+					{{ states.viewValue }} </md-option> </md-select> 					
+					<br /> <br /> <br /> <br /></td>
+			</tr>
+			<br />			
+			<tr>
+				<td><md-select placeholder="County" name="county" (change)="change($event)" ngModel>
+				 <md-option 
+						*ngFor="let county of counties" [value]="county.value">
+					{{ county.viewValue }} </md-option> </md-select> </td>
+			</tr><br />
+			<tr><td>
+			<md-input-container>
+					<input mdInput placeholder="Interest Rate" disabled
+						name="interestRate" value={{interestRate}}> </md-input-container>
+			</td></tr>
+						
+			<br />
+			<br />
+			<br />
+			<br />
+			<tr>
+				<td>
+					<button md-button color="primary"
+						(click)=submit(insuranceForm)>Submit</button>
+				</td>
+				<td> <button md-button  color="primary" (click)="dialogRef.close()">Cancel</button>
+				</td>
+				<td> <button md-button  color="primary" (click)="dialogRef.close()">Close</button>
+				</td>
+			</tr>
+		</table>
+		</md-card>
+	</div>
+</form>

@@ -23,6 +23,14 @@ md-sidenav-container.m2app-dark {
 .app-toolbar-filler {
   flex: 1 1 auto;
 }
+.demo-dialog {
+  color: rebeccapurple;
+}
+
+.demo-dialog-card {
+  max-width: 350px;
+  margin: 20px 0;
+}
 
 .app-toolbar-menu {
   padding: 0 14px 0 14px;
