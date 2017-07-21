@@ -1,22 +1,35 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {MaterialModule} from '@angular/material';
-import {Material2AppAppComponent}  from './app.component';
-import {CustomerFormComponent} from './customerWallet.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { FormsModule }   from '@angular/forms';
-import {InsurenceFormComponent} from './insurenceForm.component';
-import {AccountTypeComponent} from './addAccountType.component';
+
+import {NgModule} from "@angular/core";
+import {AppComponent} from "./app.component";
+import {BrowserModule} from "@angular/platform-browser";
+import {RouterModule} from "@angular/router";
+import {AboutComponent, ContactComponent, NotFoundComponent} from "./routecomponent";
+import {Reverseletters} from "./app.pipe";
+import {PersonComponent} from "./user/person.component";
+import {TableComponent} from "./table/table.component";
+import {TypographyComponent} from "./typography/typography.component";
+import {IconComponent} from "./icons/icon.component";
+import {NotificationComponent} from "./notification/notification.component";
+import {HeaderComponent} from "./header/header.component";
+import {FooterComponent} from "./footer/footer.component";
+import {SideNavComponent} from "./sidenav/sidenav.component";
+import {HomeComponent} from "./home/home.component";
 
 @NgModule({
-  imports: [
-    BrowserModule,
-      BrowserAnimationsModule,
-    MaterialModule,
-    FormsModule
-  ],
-  declarations: [Material2AppAppComponent,CustomerFormComponent,InsurenceFormComponent,AccountTypeComponent],
-  entryComponents: [CustomerFormComponent,InsurenceFormComponent,AccountTypeComponent],
-  bootstrap: [Material2AppAppComponent]
+    imports: [BrowserModule,
+        RouterModule.forRoot([
+            {path: "person", component: PersonComponent},
+            {path: "table", component: TableComponent},
+            {path: "librarybooks", component: TypographyComponent},
+            {path: "bubblechart", component: IconComponent} ,
+            {path: "notifications", component: NotificationComponent} ,
+            {path: "home", component: HomeComponent}
+                       
+        ])
+    ],
+    declarations: [AppComponent, HomeComponent, AboutComponent, ContactComponent, NotFoundComponent, Reverseletters,
+    PersonComponent,TableComponent,TypographyComponent,IconComponent,NotificationComponent,
+    HeaderComponent,FooterComponent,SideNavComponent],
+    bootstrap: [AppComponent]
 })
-export class MaterialAppModule { }
+export class AppModule {}

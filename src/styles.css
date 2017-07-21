@@ -1,9 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
 
-/* @import '~https://fonts.googleapis.com/icon?family=Material+Icons';
+ @import '~https://fonts.googleapis.com/icon?family=Material+Icons';
 @import '~@angular/material/core/theming/prebuilt/deeppurple-amber.css';
 
+@import './../node_modules/@angular/material/core/theming/all-theme';
+
+
+@import '~http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css';
+@import '~http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons';
+@import '~https://unpkg.com/@angular/material/core/theming/prebuilt/indigo-pink.css';
+
+
 body {
+	
   margin: 0;
   font-family: Roboto, sans-serif;
 }
@@ -40,4 +49,4 @@ md-sidenav {
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-} */
+} 
