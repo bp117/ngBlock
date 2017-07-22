@@ -60,3 +60,23 @@ typings/
 # dotenv environment variables file
 .env
 
+/.tern-project
+
+app/**/*.js
+app/**/*.map
+
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+# System Files
+.DS_Store
+Thumbs.db
+
+.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+testem.log
+/typings
