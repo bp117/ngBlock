@@ -1,4 +1,3 @@
-
 import {NgModule} from "@angular/core";
 import {AppComponent} from "./app.component";
 import {BrowserModule} from "@angular/platform-browser";
@@ -23,7 +22,10 @@ import {HomeComponent} from "./home/home.component";
             {path: "librarybooks", component: TypographyComponent},
             {path: "bubblechart", component: IconComponent} ,
             {path: "notifications", component: NotificationComponent} ,
-            {path: "home", component: HomeComponent}
+            {path: "home", component: HomeComponent},
+             { path: '' , component: HeaderComponent, outlet: 'header'},
+             { path: '' , component: FooterComponent, outlet: 'footer'} ,   
+             { path: '' , component: SideNavComponent, outlet: 'navbar'} 
                        
         ])
     ],
