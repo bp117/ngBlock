@@ -80,3 +80,6 @@ Thumbs.db
 npm-debug.log
 testem.log
 /typings
+
+#DIST folder
+dist/
