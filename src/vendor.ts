@@ -13,6 +13,6 @@ import 'ngx-bootstrap';
 // Other vendors for example jQuery, Lodash or Bootstrap
 // You can import js, ts, css, sass, ...
 require('bootstrap/dist/css/bootstrap.min.css');
-require('./css/material-dashboard.css');
+require('./assets/css/material-dashboard.css');
 
 
