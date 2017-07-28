@@ -5,7 +5,6 @@ import { FormsModule }    from '@angular/forms';
 import {AppComponent} from "./app.component";
 import { AppRoutingModule } from './app-routing.module';
 
-import {AboutComponent, ContactComponent, NotFoundComponent} from "./routecomponent";
 import {Reverseletters} from "./app.pipe";
 import {PersonComponent} from "./user/person.component";
 import {TableComponent} from "./table/table.component";
@@ -20,7 +19,7 @@ import {HomeComponent} from "./home/home.component";
 @NgModule({
     imports: [BrowserModule,FormsModule, AppRoutingModule
     ],
-    declarations: [AppComponent, HomeComponent, AboutComponent, ContactComponent, NotFoundComponent, Reverseletters,
+    declarations: [AppComponent, HomeComponent, Reverseletters,
     PersonComponent,TableComponent,TypographyComponent,IconComponent,NotificationComponent,
     HeaderComponent,FooterComponent,SideNavComponent],
     bootstrap: [AppComponent]
