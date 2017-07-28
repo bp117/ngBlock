@@ -5,7 +5,6 @@ import { FormsModule }    from '@angular/forms';
 import {AppComponent} from "./app.component";
 import { AppRoutingModule } from './app-routing.module';
 
-import {AboutComponent, ContactComponent, NotFoundComponent} from "./routecomponent";
 import {Reverseletters} from "./app.pipe";
 import {PersonComponent} from "./user/person.component";
 import {TableComponent} from "./table/table.component";
