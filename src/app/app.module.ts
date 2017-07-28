@@ -19,7 +19,7 @@ import {HomeComponent} from "./home/home.component";
 @NgModule({
     imports: [BrowserModule,FormsModule, AppRoutingModule
     ],
-    declarations: [AppComponent, HomeComponent, AboutComponent, ContactComponent, NotFoundComponent, Reverseletters,
+    declarations: [AppComponent, HomeComponent, Reverseletters,
     PersonComponent,TableComponent,TypographyComponent,IconComponent,NotificationComponent,
     HeaderComponent,FooterComponent,SideNavComponent],
     bootstrap: [AppComponent]
