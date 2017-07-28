@@ -15,13 +15,17 @@ import {HeaderComponent} from "./header/header.component";
 import {FooterComponent} from "./footer/footer.component";
 import {SideNavComponent} from "./sidenav/sidenav.component";
 import {HomeComponent} from "./home/home.component";
+import {CustomerFormComponent} from "./customer-wallet/customerWallet.component";
+import {InsurenceFormComponent} from "./insurence/insurenceForm.component";
+import {AccountTypeComponent} from "./acctType/addAccountType.component";
 
 @NgModule({
     imports: [BrowserModule,FormsModule, AppRoutingModule
     ],
     declarations: [AppComponent, HomeComponent, Reverseletters,
     PersonComponent,TableComponent,TypographyComponent,IconComponent,NotificationComponent,
-    HeaderComponent,FooterComponent,SideNavComponent],
+    HeaderComponent,FooterComponent,SideNavComponent,CustomerFormComponent,InsurenceFormComponent,
+    AccountTypeComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

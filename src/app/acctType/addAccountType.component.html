@@ -1,0 +1,28 @@
+<div class="row">
+	                    <div class="col-md-8">
+	                        <div class="card">
+	                            <div class="card-header" data-background-color="purple">
+	                                <h4 class="title"> Transaction Account Type</h4>
+									<p class="category">Add Transaction Account Type</p>
+	                            </div>
+	                            <div class="card-content">
+	                                <form #addAccTypeForm="ngForm" (ngSubmit)="onSubmit(addAccTypeForm.value)">
+	                                    <div class="row">
+	                                        <div class="col-md-5">
+												<div class="form-group label-floating">
+													<label class="control-label">Account Type</label>
+													<input type="text" name="accountType" ngModel
+													 class="form-control">
+												</div>
+	                                        </div>	                                      
+	                                    </div>
+
+	                                 	<button type="submit" class="btn btn-primary pull-right">ADD</button>
+	                                    <div class="clearfix"></div>
+	                                </form>
+	                            </div>
+	                        </div>
+	                    </div>
+					
+	                </div>
+	            

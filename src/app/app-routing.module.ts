@@ -10,6 +10,9 @@ import {HeaderComponent} from "./header/header.component";
 import {FooterComponent} from "./footer/footer.component";
 import {SideNavComponent} from "./sidenav/sidenav.component";
 import {HomeComponent} from "./home/home.component";
+import {CustomerFormComponent} from "./customer-wallet/customerWallet.component";
+import {InsurenceFormComponent} from "./insurence/insurenceForm.component";
+import {AccountTypeComponent} from "./acctType/addAccountType.component";
 
 const appRoutes: Routes = [
     { path: "person", component: PersonComponent },
@@ -18,6 +21,9 @@ const appRoutes: Routes = [
     { path: "bubblechart", component: IconComponent },
     { path: "notifications", component: NotificationComponent },
     { path: "home", component: HomeComponent },
+     { path: "customerWallet", component: CustomerFormComponent },
+     { path: "addAccType", component: AccountTypeComponent },
+      { path: "insurence", component: InsurenceFormComponent },
     { path: '', component: HeaderComponent, outlet: 'header' },
     { path: '', component: FooterComponent, outlet: 'footer' },
     { path: '', component: SideNavComponent, outlet: 'navbar' }

@@ -1,0 +1,49 @@
+<div class="row">
+	                    <div class="col-md-8">
+	                        <div class="card">
+	                            <div class="card-header" data-background-color="purple">
+	                                <h4 class="title">InsurenceForm</h4>
+									<p class="category">InsurenceForm</p>
+	                            </div>
+	                            <div class="card-content">
+	                                <form #insuranceForm="ngForm" (ngSubmit)="onSubmit(insuranceForm.value)">
+	                                    <div class="row">
+	                                        <div class="col-md-6 dropdown">
+	                                        
+	                                     
+									       <label for="s1">State</label>
+											    <select id="s1" class="form-control" name="state" (change)="getCountyList($item)" ngModel>
+											      <option *ngFor="let state of states" [value]="state.value">
+														{{ state.viewValue }} <option>
+											    </select>
+	                                        </div>
+	                                    </div>
+
+	                                    <div class="row">
+	                                         <div class="col-md-6 dropdown">
+	                                           <label for="s1">County</label>
+											    <select id="s1" class="form-control" name="county" (change)="change($event)" ngModel>
+											      <option *ngFor="let county of counties" [value]="county.value">
+														{{ county.viewValue }}  <option>
+											    </select>
+	                                        </div>	                                
+	                                    </div>
+	                                    <div class="row">
+	                                        <div class="col-md-5">
+												<div class="form-group label-floating">
+													<label class="control-label">Interest Rate (%)</label>
+													<input type="text" name="interestRate" value={{interestRate}} ngModel
+													 class="form-control" >
+												</div>
+	                                        </div>	                                      
+	                                    </div>
+
+	                                 	<button type="submit" class="btn btn-primary pull-right">SEND</button>
+	                                    <div class="clearfix"></div>
+	                                </form>
+	                            </div>
+	                        </div>
+	                    </div>
+					
+	                </div>
+	            

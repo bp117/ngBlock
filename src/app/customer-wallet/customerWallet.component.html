@@ -1,0 +1,49 @@
+<div class="row">
+	                    <div class="col-md-8">
+	                        <div class="card">
+	                            <div class="card-header" data-background-color="purple">
+	                                <h4 class="title">Customer Wallet</h4>
+									<p class="category">Transfer Amount</p>
+	                            </div>
+	                            <div class="card-content">
+	                                <form #customerForm="ngForm" (ngSubmit)="onSubmit(customerForm.value)">
+	                                    <div class="row">
+	                                        <div class="col-md-5">
+												<div class="form-group label-floating">
+													<label class="control-label">Available Balance (disabled)</label>
+													<input type="text" name="availableBalance" value={{balance}}
+													 class="form-control" disabled>
+												</div>
+	                                        </div>	                                      
+	                                    </div>
+
+	                                    <div class="row">
+	                                        <div class="col-md-6 dropdown">	                                     
+									       <label for="s1">Transaction Account</label>
+											    <select id="s1" class="form-control" name="transactionAccount" (change)="change($event)" ngModel>
+											      <option *ngFor="let accType of accTypes" [value]="accType.value">
+											    	  {{ accType.viewValue }} <option>
+											    </select>
+
+	                                        </div>
+	                                       
+	                                    </div>
+
+	                                    <div class="row">
+	                                        <div class="col-md-12">
+												<div class="form-group label-floating">
+													<label class="control-label">Amount Transfer</label>
+													<input type="text" name="amountTransfer" ngModel class="form-control" >
+												</div>
+	                                        </div>
+	                                    </div>
+
+	                                 	<button type="submit" class="btn btn-primary pull-right">SEND</button>
+	                                    <div class="clearfix"></div>
+	                                </form>
+	                            </div>
+	                        </div>
+	                    </div>
+					
+	                </div>
+	            
