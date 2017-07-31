@@ -2,8 +2,8 @@
 	                    <div class="col-md-8">
 	                        <div class="card">
 	                            <div class="card-header" data-background-color="purple">
-	                                <h4 class="title">Customer Wallet</h4>
-									<p class="category">Transfer Amount</p>
+	                                <h4 class="title">Customer Wallet Management</h4>
+									<p class="category">Transfer Amount To Escrow Acc Manually (Not Enough Funds)</p>
 	                            </div>
 	                            <div class="card-content">
 	                                <form #customerForm="ngForm" (ngSubmit)="onSubmit(customerForm.value)">
@@ -38,8 +38,10 @@
 	                                        </div>
 	                                    </div>
 
-	                                 	<button type="submit" class="btn btn-primary pull-right">SEND</button>
-	                                    <div class="clearfix"></div>
+	                                 	<button type="submit" class="btn btn-primary pull-right">Transfer to T&I</button>
+	                                    <div class="clearfix">
+	                                    <b>Note :</b> Button will be disabled by default, it will be enabled only if there is a exception w.r.to less funds in Escrow acc.
+	                                    </div>
 	                                </form>
 	                            </div>
 	                        </div>

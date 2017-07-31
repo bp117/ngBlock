@@ -2,6 +2,9 @@ import {NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import { FormsModule }    from '@angular/forms';
 
+import { MaterialModule, MdDatepickerModule, MdNativeDateModule } from '@angular/material';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
 import {AppComponent} from "./app.component";
 import { AppRoutingModule } from './app-routing.module';
 
@@ -18,14 +21,18 @@ import {HomeComponent} from "./home/home.component";
 import {CustomerFormComponent} from "./customer-wallet/customerWallet.component";
 import {InsurenceFormComponent} from "./insurence/insurenceForm.component";
 import {AccountTypeComponent} from "./acctType/addAccountType.component";
+import {LedgerFormComponent} from "./ledger/ledgerForm.component";
+import {SearchComponent} from "./insurence/search.component";
+import {DashboardComponent} from "./dashboard/dashboard.component";
 
 @NgModule({
-    imports: [BrowserModule,FormsModule, AppRoutingModule
+    imports: [BrowserModule,FormsModule, BrowserAnimationsModule,AppRoutingModule,MaterialModule,
+    MdDatepickerModule,MdNativeDateModule   
     ],
     declarations: [AppComponent, HomeComponent, Reverseletters,
     PersonComponent,TableComponent,TypographyComponent,IconComponent,NotificationComponent,
     HeaderComponent,FooterComponent,SideNavComponent,CustomerFormComponent,InsurenceFormComponent,
-    AccountTypeComponent],
+    AccountTypeComponent,LedgerFormComponent,SearchComponent,DashboardComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

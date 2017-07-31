@@ -50,3 +50,6 @@ md-sidenav {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 } 
+nav ul li.active {
+  background-color: rgba(0, 0, 0, 0.1);
+}

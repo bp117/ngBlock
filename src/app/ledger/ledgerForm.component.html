@@ -1,0 +1,50 @@
+<div class="row">
+	                    <div class="col-md-8">
+	                        <div class="card">
+	                            <div class="card-header" data-background-color="purple">
+	                                <h4 class="title">Ledger Form</h4>
+									<p class="category">Send the info to Ledger</p>
+	                            </div>
+	                            <div class="card-content">	                                
+	                                    <div class="row">
+	                                        <div class="col-md-5">
+												<div class="form-group label-floating">
+													<label class="control-label">Frequesncy</label>
+													<input type="text" name="frequency" class="form-control" >
+												</div>
+	                                        </div>	                                      
+	                                    </div>
+
+	                                    <div class="row">
+	                                        <div class="col-md-5">
+												<div class="form-group label-floating">
+													<label class="control-label">When to Start</label>
+													<md-input-container>
+													  <input mdInput [mdDatepicker]="picker" placeholder="Choose a date">
+													  <button mdSuffix [mdDatepickerToggle]="picker"></button>
+													</md-input-container>
+													<md-datepicker #picker></md-datepicker>
+												</div>
+	                                        </div>	
+	                                     </div>  
+
+	                                    <div class="row">
+	                                        <div class="col-md-12">
+												<div class="form-group label-floating">
+													<label class="control-label">Interest Rate (%)</label>
+													<input type="text" name="amountTransfer" ngModel class="form-control" >
+												</div>
+	                                        </div>
+	                                    </div>
+
+	                                 	<button type="submit" class="btn btn-primary pull-right">Save</button>
+	                                    <div class="clearfix">
+	                                    <b>Note :</b> This information will send to the Ledger.
+	                                    </div>
+	                               
+	                            </div>
+	                        </div>
+	                    </div>
+					
+	                </div>
+	            

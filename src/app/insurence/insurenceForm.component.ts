@@ -1,4 +1,4 @@
-import {Component, Optional} from '@angular/core';
+import {Component, Output} from '@angular/core';
 import { NgForm }  from '@angular/forms';
 
 
@@ -7,11 +7,10 @@ import { NgForm }  from '@angular/forms';
   templateUrl: 'insurenceForm.component.html'
 })
 export class InsurenceFormComponent {
-        constructor() {}
-          
-        interestRate = 2;
- 
-      states  = [{viewValue:"NJ"},{viewValue:"WV"},{viewValue:"MN"},{viewValue:"SD"},{viewValue:"OK"},{viewValue:"AK"},{viewValue:"AL"},
+        
+     @Output() states : any;
+        constructor() {
+             this.states = [{viewValue:"NJ"},{viewValue:"WV"},{viewValue:"MN"},{viewValue:"SD"},{viewValue:"OK"},{viewValue:"AK"},{viewValue:"AL"},
                  {viewValue:"ND"},{viewValue:"WY"},{viewValue:"CA"},{viewValue:"MA"},{viewValue:"VA"},{viewValue:"WI"},{viewValue:"AR"},
                  {viewValue:"NM"},{viewValue:"MD"},{viewValue:"TN"},{viewValue:"OH"},{viewValue:"NE"},{viewValue:"NH"},{viewValue:"ME"},
                 {viewValue:"GA"},{viewValue:"IL"},{viewValue:"MI"},{viewValue:"KS"},{viewValue:"UT"},{viewValue:"NY"},{viewValue:"RI"},
@@ -19,6 +18,19 @@ export class InsurenceFormComponent {
                 {viewValue:"CT"},{viewValue:"FL"},{viewValue:"MS"},{viewValue:"IN"},{viewValue:"MO"},{viewValue:"LA"},{viewValue:"TX"},
                 {viewValue:"ID"},{viewValue:"WA"},{viewValue:"NV"},{viewValue:"HI"},{viewValue:"PA"},{viewValue:"NC"},{viewValue:"KY"},
                 {viewValue:"AZ"},{viewValue:"OR"}];
+             }
+
+        ngOnInit(){
+            this.tableVisible = false;
+            }
+    
+
+        interestRate = 2;
+        data: string;
+        tableVisible : boolean = false; 
+ 
+    
+    
     
     
     counties = [{viewValue:"GA"},{viewValue:"IL"},{viewValue:"MI"}];
@@ -34,7 +46,7 @@ export class InsurenceFormComponent {
         
         }*/    
   
-   data: string; 
+   
     onSubmit(insuranceForm : any) {           
             console.log("insuranceForm  ",insuranceForm);
         }
@@ -43,6 +55,9 @@ export class InsurenceFormComponent {
     private change(value: any) {
        console.log('Selected value is: ', value);
      }
-   
+   search(insuranceForm : any) {           
+            console.log("insuranceForm in Search ",insuranceForm);
+               this.tableVisible = true;
+        }
 }
     

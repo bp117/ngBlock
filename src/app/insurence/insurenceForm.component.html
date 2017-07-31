@@ -2,8 +2,8 @@
 	                    <div class="col-md-8">
 	                        <div class="card">
 	                            <div class="card-header" data-background-color="purple">
-	                                <h4 class="title">InsurenceForm</h4>
-									<p class="category">InsurenceForm</p>
+	                                <h4 class="title">T&I Management</h4>
+									<p class="category">T&I Authority Management Screen</p>
 	                            </div>
 	                            <div class="card-content">
 	                                <form #insuranceForm="ngForm" (ngSubmit)="onSubmit(insuranceForm.value)">
@@ -28,7 +28,7 @@
 											    </select>
 	                                        </div>	                                
 	                                    </div>
-	                                    <div class="row">
+	                                    <!-- <div class="row">
 	                                        <div class="col-md-5">
 												<div class="form-group label-floating">
 													<label class="control-label">Interest Rate (%)</label>
@@ -36,11 +36,16 @@
 													 class="form-control" >
 												</div>
 	                                        </div>	                                      
-	                                    </div>
-
-	                                 	<button type="submit" class="btn btn-primary pull-right">SEND</button>
+	                                    </div> -->
+	                                 	<button type="submit" class="btn btn-primary pull-right" (click)="search(insuranceForm.value)">SEARCH</button>
+	                                 	<div *ngIf=tableVisible >
+		                                	<display-table></display-table>		                                
+		                                </div>
 	                                    <div class="clearfix"></div>
+	                                     
 	                                </form>
+		                               
+	                                
 	                            </div>
 	                        </div>
 	                    </div>
