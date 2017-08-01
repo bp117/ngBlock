@@ -6,5 +6,11 @@ import {Component,Input} from "@angular/core";
 
 })
 export class SearchComponent{
- @Input() states :any;    
+ @Input() states :any;   
+  ledgerFormVisible : boolean = false;
+    
+    openLedger(){
+        this.ledgerFormVisible = true;
+        console.log("testing ledger");
+        }
 }

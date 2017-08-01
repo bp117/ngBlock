@@ -7,12 +7,13 @@
 	                            </div>
 	                            <div class="card-content">	                                
 	                                    <div class="row">
-	                                        <div class="col-md-5">
-												<div class="form-group label-floating">
-													<label class="control-label">Frequesncy</label>
-													<input type="text" name="frequency" class="form-control" >
-												</div>
-	                                        </div>	                                      
+	                                         <div class="col-md-6 dropdown">	                                     
+									       <label for="s1">Frequency </label>
+											    <select id="s1" class="form-control" name="frequency" (change)="change($event)" ngModel>
+											      <option *ngFor="let frequency of frequencies" [value]="frequency.value">
+											    	  {{ frequency.viewValue }} <option>
+											    </select>
+	                                        </div>	                                       
 	                                    </div>
 
 	                                    <div class="row">

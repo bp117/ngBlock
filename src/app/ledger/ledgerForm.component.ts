@@ -4,7 +4,7 @@ import { MaterialModule, MdDatepickerModule, MdNativeDateModule } from '@angular
 
 
 @Component({
-  selector: 'display-customer-modal',
+  selector: 'display-ledger-modal',
   templateUrl: 'ledgerForm.component.html'
 })
 export class LedgerFormComponent {
@@ -16,7 +16,13 @@ export class LedgerFormComponent {
             //this.data = JSON.stringify(data, null, 2);
             console.log("customerForm  ",customerForm);
         }
-  
+  frequencies  = [
+        {viewValue: 'Half-Yearly', value: 'Half-Yearly'},
+        {viewValue: 'Yearly', value: 'Yearly'}     
+      ];
 
+    change(event :any){
+        console.log("Frequency Changed");
+        }
 }
 

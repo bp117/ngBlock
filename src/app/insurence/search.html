@@ -14,12 +14,12 @@
 	                                    </thead>
 	                                    <tbody>
 	                                        <tr>
-	                                        	<td><a routerLink="/ledgerForm" routerLinkActive="active">Address1</a></td>
+	                                        	<td><a  (click)="openLedger();">Address1</a></td>
 	                                        	<td>County1</td>
 	                                        	<td>State1</td>											
 	                                        </tr>
 	                                        <tr>
-	                                        	<td><a routerLink="/ledgerForm" routerLinkActive="active">Address1</a></td>
+	                                        	<td><a (click)="openLedger();">Address1</a></td>
 	                                        	<td>County1</td>
 	                                        	<td>State1</td>												
 	                                        </tr>	                                      
@@ -29,5 +29,8 @@
 	                            </div>
 	                        </div>
 	                    </div>	                   
+	                </div>
+	                <div *ngIf=ledgerFormVisible >
+	              		  <display-ledger-modal></display-ledger-modal>
 	                </div>
 	            
