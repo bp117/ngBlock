@@ -1,4 +1,4 @@
-import {Component, Output} from '@angular/core';
+import {Component, Output,Input} from '@angular/core';
 import { NgForm }  from '@angular/forms';
 
 
@@ -9,6 +9,7 @@ import { NgForm }  from '@angular/forms';
 export class InsurenceFormComponent {
         
      @Output() states : any;
+    @Input() isDashboard : boolean ;
         constructor() {
              this.states = [{viewValue:"NJ"},{viewValue:"WV"},{viewValue:"MN"},{viewValue:"SD"},{viewValue:"OK"},{viewValue:"AK"},{viewValue:"AL"},
                  {viewValue:"ND"},{viewValue:"WY"},{viewValue:"CA"},{viewValue:"MA"},{viewValue:"VA"},{viewValue:"WI"},{viewValue:"AR"},
@@ -58,6 +59,7 @@ export class InsurenceFormComponent {
    search(insuranceForm : any) {           
             console.log("insuranceForm in Search ",insuranceForm);
                this.tableVisible = true;
+       console.log("Testing isDashboard Value  ",this.isDashboard);
         }
 }
     
