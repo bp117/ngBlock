@@ -25,6 +25,7 @@ import {LedgerFormComponent} from "./ledger/ledgerForm.component";
 import {SearchComponent} from "./insurence/search.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {EscrowAccDetailsComponent} from "./escrow/escrowAccDetails.component";
+import {EscrowInsurenceFormComponent} from "./escrow/escrowInsurenceForm.component";
 
 @NgModule({
     imports: [BrowserModule,FormsModule, BrowserAnimationsModule,AppRoutingModule,MaterialModule,
@@ -33,7 +34,8 @@ import {EscrowAccDetailsComponent} from "./escrow/escrowAccDetails.component";
     declarations: [AppComponent, HomeComponent, Reverseletters,
     PersonComponent,TableComponent,TypographyComponent,IconComponent,NotificationComponent,
     HeaderComponent,FooterComponent,SideNavComponent,CustomerFormComponent,InsurenceFormComponent,
-    AccountTypeComponent,LedgerFormComponent,SearchComponent,DashboardComponent,EscrowAccDetailsComponent],
+    AccountTypeComponent,LedgerFormComponent,SearchComponent,DashboardComponent,EscrowAccDetailsComponent,
+    EscrowInsurenceFormComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

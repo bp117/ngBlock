@@ -3,12 +3,14 @@ import { NgForm }  from '@angular/forms';
 
 
 @Component({
-  selector: 'display-insurance-modal',
-  templateUrl: 'insurenceForm.component.html'
+  selector: 'display-escrowinsurance-modal',
+  templateUrl: './escrowinsurenceForm.component.html'
 })
-export class InsurenceFormComponent {
+export class EscrowInsurenceFormComponent {
         
      @Output() states : any;
+         escrowDashboard:boolean = false;
+        
     
         constructor() {
              this.states = [{viewValue:"NJ"},{viewValue:"WV"},{viewValue:"MN"},{viewValue:"SD"},{viewValue:"OK"},{viewValue:"AK"},{viewValue:"AL"},
@@ -21,14 +23,12 @@ export class InsurenceFormComponent {
                 {viewValue:"AZ"},{viewValue:"OR"}];
              }
 
-        ngOnInit(){
-            this.tableVisible = false;
-            }
+      
     
 
         interestRate = 2;
         data: string;
-        tableVisible : boolean = false; 
+        //tableVisible : boolean = false; 
  
     
     
@@ -57,9 +57,8 @@ export class InsurenceFormComponent {
        console.log('Selected value is: ', value);
      }
    search(insuranceForm : any) {           
-            console.log("insuranceForm in Search ",insuranceForm);
-               this.tableVisible = true;
-       
+         
+      this.escrowDashboard = true;
         }
 }
     

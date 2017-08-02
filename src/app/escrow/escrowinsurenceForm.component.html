@@ -39,9 +39,10 @@
 	                                    </div> -->
 	                                 	<button type="submit" class="btn btn-primary pull-right" (click)="search(insuranceForm.value)">SEARCH</button>
 	                                 	
-	                                 	<div *ngIf=tableVisible >
-		                                	<display-table></display-table>		                                
-		                                </div>		                               
+	                                 	<div *ngIf=escrowDashboard >
+		                                	<display-escrowacc-details></display-escrowacc-details>	                                
+		                                </div>
+		                                
 	                                    <div class="clearfix"></div>
 	                                     
 	                                </form>
