@@ -166,13 +166,13 @@ func UpdateEscrowApplication(stub shim.ChaincodeStubInterface, args []string) ([
 		return nil, err
 	}
 
-	err = stub.PutState(escrowApplication, eaBytes)
+	err = stub.PutState(escrowApplicationId, eaBytes)
 	if err != nil {
 		logger.Error("Could not save escrow application post update", err)
 		return nil, err
 	}
 
-	var escrowEvent = "{eventType: 'escrowApplicationUpdate', description:" + escrowApplication + "' Successfully updated status'}"
+	var escrowEvent = "{eventType: 'escrowApplicationUpdate', description:" + escrowApplicationId + "' Successfully updated status'}"
 	err = stub.SetEvent("evtSender", []byte(escrowEvent))
 	if err != nil {
 		return nil, err
