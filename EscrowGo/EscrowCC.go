@@ -5,26 +5,13 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
+	"time"
 )
 
 var logger = shim.NewLogger("mylogger")
-//{"EscrowAccountId1": 
-//	{
-//		"parcelId":"prop100", 
-//		"propertyValue": "10000000" 
-//		"customerId":"Customer100",
-//		"currentBalance": "5000"
-//		"taxFinancialInfo": {"taxAuthorityName":"ABC_Name", "taxPercentage":"2", "startDate":"mm/dd/yyy hh:mm:ss.Z", "frequency":"6 or 12", "amountCredited": "100", "taxCurrentBalance": "1200"},
-//		"bank" : {"name":"abc", "amountCredited":"3000"},//		
-//		"source": "bank / customer"
-//		"status": "Status "
-//		"lastModifieddate" "mm/dd/yyy hh:mm:ss.Z",
-//	}
-//}, 
-//
-//}
-//
-//2 functions - creditAmout(Banks will credit) and debitAmount(Tax department)
+
+// This could be stored on a blockchain table or an application
+var statusType = []string{"NEW", "TAX_DEDUCTED", "AMOUNT_CREDITED", "CLOSED"}
 
 type EscrowChaincode struct {
 }
@@ -67,29 +54,69 @@ func (t *EscrowChaincode) Init(stub shim.ChaincodeStubInterface, function string
 }
 
 func (t *EscrowChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+   
+   switch function {
+	   case "GetLastTransaction":
+		   return GetLastTransaction(stub, args)
+	   case "GetNoOfTransactions":
+		   return GetNoOfTransactions(stub, args)
+	   case "GetEscrowTransactionLog":
+		   return GetEscrowTransactionLog(stub, args)
+	   case "GetCurrentEscrowBalance":
+		   return GetCurrentEscrowBalance(stub, args)
+	   case "GetNextUpcomingPayments":
+		   return GetNextUpcomingPayments(stub, args)
+	   case "GetParcelPayments":
+		   return GetParcelPayments(stub, args)	 
+	   default:
+			return nil, nil	        	   		   
+   }
+   
+   /**
     if function == "GetEscrowApplication" {
 		return GetEscrowApplication(stub, args)
 	}
 	return nil, nil
+	**/
 }
  
 func (t *EscrowChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-    if function == "CreateEscrowBlock" {
+	
+	switch function {
+		case "CreditIntoEscrowAccount":
+			return CreditIntoEscrowAccount(stub, args)
+		case "PerformEscrowTaxDeduction":
+			return PerformEscrowTaxDeduction(stub, args)
+		case "EscrowAmountManualCredit":
+			return EscrowAmountManualCredit(stub, args)
+		case "ImportEscrowAccount":
+			return ImportEscrowAccount(stub, args)	
+		default:
+			return nil, nil		
+	}
+	
+	/**
+    if function == "CreditIntoEscrowAccount" {
         username, _ := GetCertAttribute(stub, "username")
         role, _ := GetCertAttribute(stub, "role")
         if role == "Bank_Escrow_Admin" {
-            return CreateEscrowBlock(stub, args)
+            return CreditIntoEscrowAccount(stub, args)
         } else {
             return nil, errors.New(username + " with role " + role + " does not have access to create a escrow application block")
         }
  
-    } 
-    return nil, nil
+    } else if function == "CreditIntoEscrowAccount" {
+    
+    }
+    **/
+   // return nil, nil
 }
 
-// Storing data into the Ledger
-func CreateEscrowBlock(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-    fmt.Println("Entering CreateEscrowBlock")
+/**********************************************************************************/
+/************************** Invoke APIs *******************************************/
+/**********************************************************************************/
+func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+    fmt.Println("Entering CreditIntoEscrowAccount")
  
     if len(args) < 2 {
         fmt.Println("Invalid number of args")
@@ -105,23 +132,38 @@ func CreateEscrowBlock(stub shim.ChaincodeStubInterface, args []string) ([]byte,
         return nil, err
     }
     
-    var event = escrowEvent{"createEscrowApplicationBlock", "Successfully created escrow application with ID " + escrowApplicationId}
+    var event = escrowEvent{"CreditIntoEscrowAccount", "Successfully created escrow application with ID " + escrowApplicationId}
     eventBytes, err := json.Marshal(&event)
+    
+   
     if err != nil {
-            return nil, err
+        return nil, err
     }
-    err = stub.SetEvent("evtSender", eventBytes)
-    if err != nil {
-        fmt.Println("Could not set event for escrow application creation", err)
-    }
- 
+    
     fmt.Println("Successfully saved escrow application")
     return nil, nil
 }
 
-// Fetching data from the Ledger
-func GetEscrowApplication(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-    fmt.Println("Entering GetEscrowApplication")
+func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	 fmt.Println("Entering PerformEscrowTaxDeduction")
+	return nil, nil
+}
+
+func EscrowAmountManualCredit(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	 fmt.Println("Entering EscrowAmountManualCredit")
+	return nil, nil
+}
+
+func ImportEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	 fmt.Println("Entering ImportEscrowAccount")
+	return nil, nil
+}
+
+/**********************************************************************************/
+/************************** Query APIs *******************************************/
+/**********************************************************************************/
+func GetLastTransaction(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+    fmt.Println("Entering GetLastTransaction")
  
     if len(args) < 1 {
         fmt.Println("Invalid number of arguments")
@@ -137,9 +179,39 @@ func GetEscrowApplication(stub shim.ChaincodeStubInterface, args []string) ([]by
     return bytes, nil
 }
 
+func GetNoOfTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+    fmt.Println("Entering GetNoOfTransactions")
+	
+	return bytes, nil
+}  
+
+func GetEscrowTransactionLog(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+    fmt.Println("Entering GetEscrowTransactionLog")
+	
+	return bytes, nil
+}
+
+func GetCurrentEscrowBalance(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+    fmt.Println("Entering GetCurrentEscrowBalance")
+	
+	return bytes, nil
+}
+
+func GetNextUpcomingPayments(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+    fmt.Println("Entering GetNextUpcomingPayments")
+	
+	return bytes, nil
+}
+
+func GetParcelPayments(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+    fmt.Println("Entering GetParcelPayments")
+	
+	return bytes, nil
+}  
+
 /**
 Updates the status of the Escrow application
-**/
+
 func UpdateEscrowApplication(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	logger.Debug("Entering UpdateEscrowApplication")
 
@@ -181,8 +253,10 @@ func UpdateEscrowApplication(stub shim.ChaincodeStubInterface, args []string) ([
 	return nil, nil
 
 }
+**/
 
 //Retrieving attributes from the transaction certificate of the caller
+/**
 func GetCertAttribute(stub shim.ChaincodeStubInterface, attributeName string) (string, error) {
     fmt.Println("Entering GetCertAttribute")
     attr, err := stub.ReadCertAttribute(attributeName)
@@ -192,6 +266,7 @@ func GetCertAttribute(stub shim.ChaincodeStubInterface, attributeName string) (s
     attrString := string(attr)
     return attrString, nil
 }
+**/
  
 
  
