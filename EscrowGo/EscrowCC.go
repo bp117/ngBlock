@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
-	"time"
+	
 )
 
 var logger = shim.NewLogger("mylogger")
