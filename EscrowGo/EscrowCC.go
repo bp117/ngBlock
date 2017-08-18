@@ -183,8 +183,10 @@ func GetNoOfTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byt
     fmt.Println("Entering GetNoOfTransactions")
 	
 	var escrowApplicationId = args[0]
-    bytes := stub.GetState(escrowApplicationId)
-	
+    bytes, err := stub.GetState(escrowApplicationId)
+	 if err != nil {
+        return nil, err
+    }
 	return bytes, nil
 }  
 
@@ -192,8 +194,10 @@ func GetEscrowTransactionLog(stub shim.ChaincodeStubInterface, args []string) ([
     fmt.Println("Entering GetEscrowTransactionLog")
 	
 	var escrowApplicationId = args[0]
-    bytes := stub.GetState(escrowApplicationId)
-	
+    bytes, err := stub.GetState(escrowApplicationId)
+	 if err != nil {
+        return nil, err
+    }
 	return bytes, nil
 }
 
@@ -201,8 +205,10 @@ func GetCurrentEscrowBalance(stub shim.ChaincodeStubInterface, args []string) ([
     fmt.Println("Entering GetCurrentEscrowBalance")
 	
 	var escrowApplicationId = args[0]
-    bytes := stub.GetState(escrowApplicationId)
-	
+    bytes, err := stub.GetState(escrowApplicationId)
+	 if err != nil {
+        return nil, err
+    }
 	return bytes, nil
 }
 
@@ -210,8 +216,10 @@ func GetNextUpcomingPayments(stub shim.ChaincodeStubInterface, args []string) ([
     fmt.Println("Entering GetNextUpcomingPayments")
 	
 	var escrowApplicationId = args[0]
-    bytes := stub.GetState(escrowApplicationId)
-	
+    bytes, err := stub.GetState(escrowApplicationId)
+	 if err != nil {
+        return nil, err
+    }
 	return bytes, nil
 }
 
@@ -219,8 +227,10 @@ func GetParcelPayments(stub shim.ChaincodeStubInterface, args []string) ([]byte,
     fmt.Println("Entering GetParcelPayments")
 	
 	var escrowApplicationId = args[0]
-    bytes := stub.GetState(escrowApplicationId)
-	
+    bytes, err := stub.GetState(escrowApplicationId)
+	 if err != nil {
+        return nil, err
+    }
 	return bytes, nil
 }  
 
