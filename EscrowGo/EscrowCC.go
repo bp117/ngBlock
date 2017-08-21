@@ -153,7 +153,7 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 							 dTime,
 						 }
 	 
-    err := stub.PutState(escrowApplicationId, []byte(escrowApplicationInput))
+    err = stub.PutState(escrowApplicationId, []byte(escrowApplicationInput))
     if err != nil {
         fmt.Println("Could not save escrow application to ledger", err)
         return nil, err
