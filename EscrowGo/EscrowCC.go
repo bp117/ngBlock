@@ -129,8 +129,10 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
     out, err := exec.Command("uuidgen").Output()
     if err != nil {
         log.Fatal(err)
+        return nil, errors.New("Not able to generate Unique ID")
     }
-    var escrowApplicationId = "e_"+String(out)
+    uId := string(out[:])
+    var escrowApplicationId = "e_"+uId
     var bankId = "user_type1_1"
     //var escrowApplicationInput = args[1]
     //fmt.Printf("%s", out)
