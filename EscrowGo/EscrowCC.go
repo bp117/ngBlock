@@ -134,7 +134,7 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
     //fmt.Printf("%s", out)
    
    mapD := map[string]string{"bankId": bankId, "name": args[5], "amountCredited": args[6]}
-   dTime := time.Now().UTC().Format("2006-01-02 15:04:05 UCT") 
+   var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UCT") 
     
 	var escrowApplicationInput = EscrowApplication {							 
 							 args[1],
