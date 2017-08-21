@@ -128,7 +128,7 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
     if err != nil {
         log.Fatal(err)
     }
-    var escrowApplicationId = "e_"+out.String()
+    var escrowApplicationId = "e_"+String(out)
     var bankId = "user_type1_1"
     //var escrowApplicationInput = args[1]
     //fmt.Printf("%s", out)
