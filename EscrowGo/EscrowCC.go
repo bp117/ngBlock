@@ -137,8 +137,16 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
     //var escrowApplicationInput = args[1]
     //fmt.Printf("%s", out)
    
-   propVal, e := strconv.Atoi(args[1])
-   curBal, er := strconv.Atoi(args[3])
+   propVal, err := strconv.Atoi(args[1])
+   if err != nil {
+		fmt.Println("Int conversion error: ", err)
+		return nil, err
+	}
+   curBal, err := strconv.Atoi(args[3])
+   if err != nil {
+		fmt.Println("Int conversion error: ", err)
+		return nil, err
+	}
    mapD := &Bank{bankId, args[4], args[5]}
    var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UCT") 
     
@@ -153,10 +161,10 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 							 dTime,
 						 }
 	
-	ajson, jerr := json.Marshal(escrowApplicationInput)
-	if jerr != nil {
-		fmt.Println("toJSON error: ", jerr)
-		return nil, jerr
+	ajson, err := json.Marshal(escrowApplicationInput)
+	if err != nil {
+		fmt.Println("toJSON error: ", err)
+		return nil, err
 	}
 	 
     err = stub.PutState(escrowApplicationId, []byte(ajson))
