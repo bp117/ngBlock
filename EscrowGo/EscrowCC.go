@@ -143,8 +143,7 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 							 args[4],
 							 {"bankId": bankId, "name": args[5], "amountCredited": args[6]},
 							 args[7],
-							 statusType[0],
-							 dTime
+							 statusType[0]
 						 }
 	 
     err := stub.PutState(escrowApplicationId, []byte(json.Marshal(escrowApplicationInput)))
