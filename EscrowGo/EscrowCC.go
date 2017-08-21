@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"time"
 	"log"
+	"strings"
 )
 
 var logger = shim.NewLogger("mylogger")
