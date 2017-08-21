@@ -119,7 +119,7 @@ func (t *EscrowChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
     fmt.Println("Entering CreditIntoEscrowAccount")
  
-    if args[0] == nil {
+    if len(args) != 7 {
         fmt.Println("Invalid input args")
         return nil, errors.New("Expected the escrow details for Escrow Block creation")
     }
