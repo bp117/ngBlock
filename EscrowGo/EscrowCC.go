@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"os/exec"
 	"time"
+	"log"
 )
 
 var logger = shim.NewLogger("mylogger")
