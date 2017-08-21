@@ -139,10 +139,10 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
    
    propVal, e := strconv.Atoi(args[1])
    curBal, er := strconv.Atoi(args[3])
-   mapD := Bank{bankId, args[4], args[5]}
+   mapD := &Bank{bankId, args[4], args[5]}
    var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UCT") 
     
-	var escrowApplicationInput = EscrowApplication {							 
+	escrowApplicationInput := EscrowApplication {							 
 							 args[0],
 							 propVal,
 							 args[2],
@@ -153,7 +153,7 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 							 dTime,
 						 }
 	 
-    err := stub.PutState(escrowApplicationId, []byte(json.Marshal(escrowApplicationInput)))
+    err := stub.PutState(escrowApplicationId, []byte(escrowApplicationInput))
     if err != nil {
         fmt.Println("Could not save escrow application to ledger", err)
         return nil, err
