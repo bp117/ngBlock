@@ -39,7 +39,7 @@ type EscrowApplication struct {
     PropertyValue		   int					`json:"propertyValue"`
     CustomerId             string  		 		`json:"customerId"`
     CurrentBalance		   int 		 			`json:"currentBalance"`
-    TaxFinancialInfo       *TaxFinancialInfo 	`json:"taxFinancialInfo,omitempty"`
+   // TaxFinancialInfo       *TaxFinancialInfo 	`json:"taxFinancialInfo,omitempty"`
     Bank				   *Bank				`json:"bank,omitempty"`
     Source                 string        		`json:"source"`
     Status				   string				`json:"status"`
