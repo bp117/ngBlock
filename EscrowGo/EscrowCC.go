@@ -152,8 +152,14 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 							 statusType[0],
 							 dTime,
 						 }
+	
+	ajson, jerr := json.Marshal(escrowApplicationInput)
+	if jerr != nil {
+		fmt.Println("toJSON error: ", jerr)
+		return nil, jerr
+	}
 	 
-    err = stub.PutState(escrowApplicationId, []byte(json.Marshal(escrowApplicationInput)))
+    err = stub.PutState(escrowApplicationId, []byte(ajson))
     if err != nil {
         fmt.Println("Could not save escrow application to ledger", err)
         return nil, err
