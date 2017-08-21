@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
-	
+	"os/exec"
+	"time"
 )
 
 var logger = shim.NewLogger("mylogger")
@@ -17,6 +18,7 @@ type EscrowChaincode struct {
 }
 
 type  Bank struct {
+	 BankId				string		`json:"bankId"`
 	 Name				string		`json:"name"`
 	 AmountCredited		string		`json:"amountCredited"`
 }
@@ -30,14 +32,13 @@ type TaxFinancialInfo struct {
     TaxCurrentBalance		int			`json:"taxCurrentBalance"`
 }
  
-type EscrowApplication struct {
-    ID                     string        		`json:"id"`
+type EscrowApplication struct {   
     ParcelId               string        		`json:"parcelId"`
     PropertyValue		   int					`json:"propertyValue"`
     CustomerId             string  		 		`json:"customerId"`
     CurrentBalance		   int 		 			`json:"currentBalance"`
-    TaxFinancialInfo       TaxFinancialInfo 	`json:"taxFinancialInfo"`
-    Bank				   Bank					`json:"bank"`
+    TaxFinancialInfo       *TaxFinancialInfo 	`json:"taxFinancialInfo"`
+    Bank				   *Bank				`json:"bank"`
     Source                 string        		`json:"source"`
     Status				   string				`json:"status"`
     LastModifiedDate       string       		`json:"lastModifiedDate"`
@@ -118,14 +119,34 @@ func (t *EscrowChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
     fmt.Println("Entering CreditIntoEscrowAccount")
  
-    if len(args) < 2 {
-        fmt.Println("Invalid number of args")
-        return nil, errors.New("Expected at least two arguments for Escrow Block creation")
+    if args[0] == nil {
+        fmt.Println("Invalid input args")
+        return nil, errors.New("Expected the escrow details for Escrow Block creation")
     }
  
-    var escrowApplicationId = args[0]
-    var escrowApplicationInput = args[1]
- 
+    out, err := exec.Command("uuidgen").Output()
+    if err != nil {
+        log.Fatal(err)
+    }
+    var escrowApplicationId = "e_"+out
+    var bankId = "user_type1_1"
+    //var escrowApplicationInput = args[1]
+    //fmt.Printf("%s", out)
+   
+   mapD := map[string]string{"bankId": bankId, "name": args[5], "amountCredited": args[6]}
+    
+    
+	 escrowApplicationInput := &EscrowApplication {							 
+							 ParcelId : args[1],
+							 PropertyValue: args[2],
+							 CustomerId: args[3],
+							 CurrentBalance: args[4],
+							 Bank : mapD,
+							 Source: args[7],
+							 Status: statusType[0],
+							 LastModifiedDate: time.Now().UTC().Format(time.RFC850)
+						 }
+	 
     err := stub.PutState(escrowApplicationId, []byte(escrowApplicationInput))
     if err != nil {
         fmt.Println("Could not save escrow application to ledger", err)
