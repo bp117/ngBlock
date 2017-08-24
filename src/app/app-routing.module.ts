@@ -14,7 +14,9 @@ import {CustomerFormComponent} from "./customer-wallet/customerWallet.component"
 import {InsurenceFormComponent} from "./taxmanagement/insurenceForm.component";
 import {AccountTypeComponent} from "./acctType/addAccountType.component";
 import {SearchComponent} from "./taxmanagement/search.component";
-import {DashboardComponent} from "./dashboard/dashboard.component";
+//import {DashboardComponent} from "./dashboard/dashboard.component";
+import {CustomerDashboardComponent} from "./dashboard/customer-dashboard/customerdashboard.component";
+import {PersonDashboardComponent} from "./dashboard/person-dashboard/persondashboard.component";
 
 const appRoutes: Routes = [
     { path: "person", component: PersonComponent },
@@ -26,7 +28,8 @@ const appRoutes: Routes = [
      { path: "customerWallet", component: CustomerFormComponent },
      { path: "addAccType", component: AccountTypeComponent },
       { path: "taxmgt", component: InsurenceFormComponent },      
-      { path: "dashboard", component: DashboardComponent },      
+      { path: "customerdashboard", component: CustomerDashboardComponent },
+       { path: "persondashboard", component: PersonDashboardComponent },    
     { path: '', component: HeaderComponent, outlet: 'header' },
     { path: '', component: FooterComponent, outlet: 'footer' },
     { path: '', component: SideNavComponent, outlet: 'navbar' }
