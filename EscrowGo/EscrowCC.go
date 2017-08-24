@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
-	"os/exec"
+	//"os/exec"
 	"time"
 	"log"
 	"strconv"
@@ -121,42 +121,43 @@ func (t *EscrowChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
     fmt.Println("Entering CreditIntoEscrowAccount")
  
-    if len(args) != 7 {
+    if len(args) != 8 {
         fmt.Println("Invalid input args")
         return nil, errors.New("Expected the escrow details for Escrow Block creation")
     }
  
-    out, err := exec.Command("uuidgen").Output()
+   /** out, err := exec.Command("uuidgen").Output()
     if err != nil {
         log.Fatal(err)
         return nil, errors.New("Not able to generate Unique ID")
     }
     uId := string(out[:])
-    var escrowApplicationId = "e_"+uId
+    var escrowApplicationId = "e_"+uId**/
+    var escrowApplicationId = args[0]
     var bankId = "user_type1_1"
     //var escrowApplicationInput = args[1]
     //fmt.Printf("%s", out)
    
-   propVal, err := strconv.Atoi(args[1])
+   propVal, err := strconv.Atoi(args[2])
    if err != nil {
 		fmt.Println("Int conversion error: ", err)
 		return nil, err
 	}
-   curBal, err := strconv.Atoi(args[3])
+   curBal, err := strconv.Atoi(args[4])
    if err != nil {
 		fmt.Println("Int conversion error: ", err)
 		return nil, err
 	}
-   mapD := &Bank{bankId, args[4], args[5]}
+   mapD := &Bank{bankId, args[5], args[6]}
    var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UCT") 
     
 	escrowApplicationInput := EscrowApplication {							 
-							 args[0],
+							 args[1],
 							 propVal,
-							 args[2],
+							 args[3],
 							 curBal,
 							 mapD,
-							 args[6],
+							 args[7],
 							 statusType[0],
 							 dTime,
 						 }
