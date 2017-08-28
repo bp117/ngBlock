@@ -32,14 +32,38 @@ type TaxFinancialInfo struct {
     AmountCredited			string		`json:"amountCredited"`
     TaxCurrentBalance		int			`json:"taxCurrentBalance"`
 }
- 
+
 type EscrowApplication struct {   
+    ParcelId               string        		`json:"parcelId"`
+    PropertyValue		   int					`json:"propertyValue"`
+    CustomerId             string  		 		`json:"customerId"`
+    CurrentBalance		   int 		 			`json:"currentBalance"`
+    TaxFinancialInfo       *TaxFinancialInfo 	`json:"taxFinancialInfo,omitempty"`
+    Bank				   *Bank				`json:"bank,omitempty"`
+    Source                 string        		`json:"source"`
+    Status				   string				`json:"status"`
+    LastModifiedDate       string       		`json:"lastModifiedDate"`
+}
+ 
+type BankEscrowApplication struct {   
     ParcelId               string        		`json:"parcelId"`
     PropertyValue		   int					`json:"propertyValue"`
     CustomerId             string  		 		`json:"customerId"`
     CurrentBalance		   int 		 			`json:"currentBalance"`
    // TaxFinancialInfo       *TaxFinancialInfo 	`json:"taxFinancialInfo,omitempty"`
     Bank				   *Bank				`json:"bank,omitempty"`
+    Source                 string        		`json:"source"`
+    Status				   string				`json:"status"`
+    LastModifiedDate       string       		`json:"lastModifiedDate"`
+}
+
+type TaxEscrowApplication struct {   
+    ParcelId               string        		`json:"parcelId"`
+    PropertyValue		   int					`json:"propertyValue"`
+    CustomerId             string  		 		`json:"customerId"`
+    CurrentBalance		   int 		 			`json:"currentBalance"`
+    TaxFinancialInfo       *TaxFinancialInfo 	`json:"taxFinancialInfo,omitempty"`
+    //Bank				   *Bank				`json:"bank,omitempty"`
     Source                 string        		`json:"source"`
     Status				   string				`json:"status"`
     LastModifiedDate       string       		`json:"lastModifiedDate"`
@@ -119,7 +143,7 @@ func (t *EscrowChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 /**********************************************************************************/
 func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
     fmt.Println("Entering CreditIntoEscrowAccount")
- 
+	var result EscrowApplication
     if len(args) != 8 {
         fmt.Println("Invalid input args")
         return nil, errors.New("Expected the escrow details for Escrow Block creation")
@@ -148,9 +172,19 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 		return nil, err
 	}
    mapD := &Bank{bankId, args[5], args[6]}
-   var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UCT") 
+  
+   var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UTC") 
+   
+   result.ParcelId = args[1]
+   result.PropertyValue = propVal
+   result.CustomerId = args[3]
+   result.CurrentBalance = curBal
+   result.Bank = mapD
+   result.Source = args[7]
+   result.Status = statusType[0]
+   result.LastModifiedDate = dTime 
     
-	escrowApplicationInput := EscrowApplication {							 
+	/**escrowApplicationInput := EscrowApplication {							 
 							 args[1],
 							 propVal,
 							 args[3],
@@ -159,9 +193,10 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 							 args[7],
 							 statusType[0],
 							 dTime,
-						 }
+						 }**/
 	
-	ajson, err := json.Marshal(escrowApplicationInput)
+	//ajson, err := json.Marshal(escrowApplicationInput)
+	ajson, err := json.MarshalIndent(result, "", " ")
 	if err != nil {
 		fmt.Println("toJSON error: ", err)
 		return nil, err
@@ -187,6 +222,46 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 
 func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	 fmt.Println("Entering PerformEscrowTaxDeduction")
+	 
+	/**var escrowApplicationId = args[0]
+    bytes, err := stub.GetState(escrowApplicationId)
+    if err != nil {
+        fmt.Println("Could not fetch escrow application with id "+escrowApplicationId+" from ledger", err)
+        return nil, err
+    }
+	 
+	ea :=  EscrowApplication{}
+	err := json.Unmarshal(bytes, &ea)
+	if err != nil {
+		fmt.Println("JSON to EscrowApplication error: ", err)
+		return ea, err
+	} 
+	var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UTC")
+	
+	ea.LastModifiedDate = dTime
+	
+	ajson, err := json.Marshal(ea)
+	if err != nil {
+		fmt.Println("toJSON error: ", err)
+		return nil, err
+	}
+	
+	err = stub.PutState(escrowApplicationId, []byte(ajson))
+    if err != nil {
+        fmt.Println("Could not save escrow application to ledger", err)
+        return nil, err
+    }
+	 
+	var event = escrowEvent{"PerformEscrowTaxDeduction", "Successfully performed Tax operation in escrow application with ID " + escrowApplicationId}
+    eventBytes, err := json.Marshal(&event)
+    
+   
+    if err != nil {
+        return nil, err
+    }
+    
+    fmt.Println("Successfully performed Tax operationn")
+    return eventBytes, nil**/
 	return nil, nil
 }
 
