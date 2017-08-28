@@ -25,9 +25,10 @@ type  Bank struct {
 }
 
 type TaxFinancialInfo struct { 
+	TaxId    				string		`json:"taxId"`
 	TaxAuthorityName   		string		`json:"taxAuthorityName"`
     TaxPercentage        	int 		`json:"taxPercentage"`
-    StartDate   			int 		`json:"startDate"`
+    StartDate   			string 		`json:"startDate"`
     Frequency 				int 		`json:"frequency"`
     AmountCredited			string		`json:"amountCredited"`
     TaxCurrentBalance		int			`json:"taxCurrentBalance"`
@@ -232,7 +233,7 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
     }
 	 
 	ea :=  EscrowApplication{}
-	err, _ := json.Unmarshal(bytes, &ea)
+	sucess, err := json.Unmarshal(bytes, &ea)
 	if err != nil {
 		fmt.Println("JSON to EscrowApplication error: ", err)
 		return nil, err
@@ -240,9 +241,10 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 	
 	var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UTC")
 	var taxId = "user_type1_2"
-	var amtCredited = (strconv.Atoi(args[2]) * ea.PropertyValue) / 100
+	var taxPer = strconv.Atoi(args[2])
+	var amtCredited = (taxPer * ea.PropertyValue) / 100
 	var taxCurBal = ea.TaxFinancialInfo.TaxCurrentBalance + amtCredited
-	mapT := &TaxFinancialInfo{taxId, args[1], args[2], args[3], args[4], amtCredited, taxCurBal}
+	mapT := &TaxFinancialInfo{taxId, strconv.Atoi(args[1]), taxPer, args[3], strconv.Atoi(args[4]), amtCredited, taxCurBal}
 	 
    result.ParcelId = args[1]
    result.PropertyValue = ea.PropertyValue
