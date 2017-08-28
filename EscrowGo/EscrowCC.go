@@ -45,7 +45,7 @@ type EscrowApplication struct {
     LastModifiedDate       string       		`json:"lastModifiedDate"`
 }
  
-type BankEscrowApplication struct {   
+/**type BankEscrowApplication struct {   
     ParcelId               string        		`json:"parcelId"`
     PropertyValue		   int					`json:"propertyValue"`
     CustomerId             string  		 		`json:"customerId"`
@@ -68,7 +68,7 @@ type TaxEscrowApplication struct {
     Status				   string				`json:"status"`
     LastModifiedDate       string       		`json:"lastModifiedDate"`
 }
-
+**/
 // Custom Event
 type escrowEvent struct {
     Type        string `json:"type"`
@@ -222,8 +222,9 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 
 func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	 fmt.Println("Entering PerformEscrowTaxDeduction")
-	 
-	/**var escrowApplicationId = args[0]
+	var result EscrowApplication 
+	
+	var escrowApplicationId = args[0]
     bytes, err := stub.GetState(escrowApplicationId)
     if err != nil {
         fmt.Println("Could not fetch escrow application with id "+escrowApplicationId+" from ledger", err)
@@ -236,9 +237,21 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 		fmt.Println("JSON to EscrowApplication error: ", err)
 		return ea, err
 	} 
-	var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UTC")
 	
-	ea.LastModifiedDate = dTime
+	var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UTC")
+	var taxId = "user_type1_2"
+	var amtCredited = (strconv.Atoi(args[2]) * ea.PropertyValue) / 100
+	var taxCurBal = ea.TaxFinancialInfo.TaxCurrentBalance + amtCredited
+	mapT := &TaxFinancialInfo{taxId, args[1], args[2], args[3], args[4], amtCredited, taxCurBal}
+	 
+   result.ParcelId = args[1]
+   result.PropertyValue = ea.PropertyValue
+   result.CustomerId = ea.CustomerId
+   result.CurrentBalance = ea.CurrentBalance
+   result.TaxFinancialInfo = mapT
+   result.Source = args[5]
+   result.Status = statusType[1]
+   result.LastModifiedDate = dTime
 	
 	ajson, err := json.Marshal(ea)
 	if err != nil {
@@ -261,8 +274,8 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
     }
     
     fmt.Println("Successfully performed Tax operationn")
-    return eventBytes, nil**/
-	return nil, nil
+    return eventBytes, nil
+	//return nil, nil
 }
 
 func EscrowAmountManualCredit(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
