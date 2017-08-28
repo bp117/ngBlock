@@ -275,7 +275,7 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
    result.Status = statusType[1]
    result.LastModifiedDate = dTime
 	
-	ajson, err := json.Marshal(ea)
+	ajson, err := json.MarshalIndent(result, "", " ")
 	if err != nil {
 		fmt.Println("toJSON error: ", err)
 		return nil, err
