@@ -232,10 +232,10 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
     }
 	 
 	ea :=  EscrowApplication{}
-	err := json.Unmarshal(bytes, &ea)
+	err, _ := json.Unmarshal(bytes, &ea)
 	if err != nil {
 		fmt.Println("JSON to EscrowApplication error: ", err)
-		return ea, err
+		return nil, err
 	} 
 	
 	var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UTC")
