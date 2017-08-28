@@ -253,11 +253,17 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 		fmt.Println("Int conversion error: ", err)
 		return nil, err
 	}
+    
+    taxCurBal, err := strconv.Atoi(ea.TaxFinancialInfo.TaxCurrentBalance)
+    if err != nil {
+		fmt.Println("Int conversion error: ", err)
+		return nil, err
+	}
 	
 	var amtCredited = (taxPer * ea.PropertyValue) / 100
-	var taxCurBal = ea.TaxFinancialInfo.TaxCurrentBalance + amtCredited
+	var taxBal = taxCurBal + amtCredited
 	amtC := strconv.Itoa(amtCredited)
-	taxCB := strconv.Itoa(taxCurBal)
+	taxCB := strconv.Itoa(taxBal)
 	mapT := &TaxFinancialInfo{taxId, args[1], taxPer, args[3], frequency, amtC, taxCB}
 	 
    result.ParcelId = ea.ParcelId
