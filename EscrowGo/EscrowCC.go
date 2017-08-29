@@ -379,7 +379,7 @@ func GetAllTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byte
 //////////////////////////////////////////////////////////
 // Converts JSON String to EscrowApplication Object
 //////////////////////////////////////////////////////////
-func JSONtoEscrowApp(areq []byte) (Bid, error) {
+func JSONtoEscrowApp(areq []byte) (EscrowApplication, error) {
 
 	myHand := EscrowApplication{}
 	err := json.Unmarshal(EscrowApplication, &myHand)
@@ -636,7 +636,7 @@ func QueryLedger(stub shim.ChaincodeStubInterface, tableName string, args []stri
 
 	// Perform Any additional processing of data
 	fmt.Println("QueryLedger() : Successful - Proceeding to ProcessRequestType ")
-	err = ProcessQueryResult(stub, Avalbytes, args)
+	//err = ProcessQueryResult(stub, Avalbytes, args)
 	if err != nil {
 		fmt.Println("QueryLedger() : Cannot create object  : ", args[1])
 		jsonResp := "{\"QueryLedger() Error\":\" Cannot create Object for key " + args[0] + "\"}"
