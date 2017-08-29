@@ -317,7 +317,7 @@ func ImportEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([]byt
 /**********************************************************************************/
 func GetAllTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 var jsonResp string
-	var docBase = "DOCUMENT-"
+	
 	var err error
 	var logData, docIndxData []byte
 	var pageNum, pageSize, docIndx int
