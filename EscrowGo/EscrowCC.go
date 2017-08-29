@@ -143,8 +143,8 @@ func (t *EscrowChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	switch function {
 		case "CreditIntoEscrowAccount":
 			return CreditIntoEscrowAccount(stub, args)
-		case "PerformEscrowTaxDeduction":
-			return PerformEscrowTaxDeduction(stub, args)
+		//case "PerformEscrowTaxDeduction":
+		//	return PerformEscrowTaxDeduction(stub, args)
 		case "EscrowAmountManualCredit":
 			return EscrowAmountManualCredit(stub, args)
 		case "ImportEscrowAccount":
