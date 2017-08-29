@@ -319,7 +319,7 @@ var jsonResp string
 	var docBase = "DOCUMENT-"
 	var err error
 	var logData, docIndxData []byte
-	var pageNum, pageSize,escrowApplicationId
+	var pageNum, pageSize,escrowApplicationId int
 	escrowApplicationId = args[3]
 	if len(args) < 4 {
 		return nil, errors.New("Incorrect number of arguments. Expecting name of the pageNum, pageSize and LogInfo for query")
