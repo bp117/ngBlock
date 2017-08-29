@@ -14,6 +14,7 @@ var logger = shim.NewLogger("mylogger")
 
 // This could be stored on a blockchain table or an application
 var statusType = []string{"NEW", "TAX_DEDUCTED", "AMOUNT_CREDITED", "CLOSED"}
+var escrowTables = []string{"EscrowAppTable"}
 
 type EscrowChaincode struct {
 }
@@ -44,6 +45,14 @@ type EscrowApplication struct {
     Source                 string        		`json:"source"`
     Status				   string				`json:"status"`
     LastModifiedDate       string       		`json:"lastModifiedDate"`
+}
+
+func GetNumberOfKeys(tname string) int {
+	TableMap := map[string]int{
+		"EscrowAppTable":        1,
+		
+	}
+	return TableMap[tname]
 }
  
 /**type BankEscrowApplication struct {   
@@ -77,7 +86,27 @@ type escrowEvent struct {
 }
 
 func (t *EscrowChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-    return nil, nil
+	fmt.Println("[Escrow Application] Init")
+	var err error
+	
+	for _, val := range escrowTables {
+		err = stub.DeleteTable(val)
+		if err != nil {
+			return nil, fmt.Errorf("Init(): DeleteTable of %s  Failed ", val)
+		}
+		err = InitLedger(stub, val)
+		if err != nil {
+			return nil, fmt.Errorf("Init(): InitLedger of %s  Failed ", val)
+		}
+	}
+	// Update the ledger with the Application version
+	err = stub.PutState("version", []byte(strconv.Itoa(1)))
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Println("Init() Initialization Complete  : ", args)
+	return []byte("Init(): Initialization Complete"), nil
 }
 
 func (t *EscrowChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
@@ -444,6 +473,39 @@ func GetCertAttribute(stub shim.ChaincodeStubInterface, attributeName string) (s
 }
 **/
  
+ func InitLedger(stub shim.ChaincodeStubInterface, tableName string) error {
+
+	// Generic Table Creation Function - requires Table Name and Table Key Entry
+	// Create Table - Get number of Keys the tables supports
+	// This version assumes all Keys are String and the Data is Bytes	
+
+	nKeys := GetNumberOfKeys(tableName)
+	if nKeys < 1 {
+		fmt.Println("Atleast 1 Key must be provided \n")
+		fmt.Println("Escrow_Application: Failed creating Table ", tableName)
+		return errors.New("Escrow_Application: Failed creating Table " + tableName)
+	}
+
+	var columnDefsForTbl []*shim.ColumnDefinition
+
+	for i := 0; i < nKeys; i++ {
+		columnDef := shim.ColumnDefinition{Name: "keyName" + strconv.Itoa(i), Type: shim.ColumnDefinition_STRING, Key: true}
+		columnDefsForTbl = append(columnDefsForTbl, &columnDef)
+	}
+
+	columnLastTblDef := shim.ColumnDefinition{Name: "Details", Type: shim.ColumnDefinition_BYTES, Key: false}
+	columnDefsForTbl = append(columnDefsForTbl, &columnLastTblDef)
+
+	// Create the Table (Nil is returned if the Table exists or if the table is created successfully
+	err := stub.CreateTable(tableName, columnDefsForTbl)
+
+	if err != nil {
+		fmt.Println("Escrow_Application: Failed creating Table ", tableName)
+		return errors.New("Escrow_Application: Failed creating Table " + tableName)
+	}
+
+	return err
+}
 
  
 func main() {
