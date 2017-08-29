@@ -216,7 +216,7 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
    result.Status = statusType[0]
    result.LastModifiedDate = dTime 
     
-	escrowApplicationInput := EscrowApplication {							 
+	/**escrowApplicationInput := EscrowApplication {							 
 							 args[1],
 							 propVal,
 							 args[3],
@@ -225,10 +225,10 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 							 args[7],
 							 statusType[0],
 							 dTime,
-						 }
+						 }**/
 	
-	ajson, err := json.Marshal(escrowApplicationInput)
-	//ajson, err := json.MarshalIndent(result, "", " ")
+	//ajson, err := json.Marshal(escrowApplicationInput)
+	ajson, err := json.MarshalIndent(result, "", " ")
 	if err != nil {
 		fmt.Println("toJSON error: ", err)
 		return nil, err
@@ -370,8 +370,8 @@ func GetAllTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byte
 		tlist[i] = eApp
 	}
 
-	jsonRows, _ := json.Marshal(tlist)
-	//jsonRows, _ := json.MarshalIndent(tlist, "", " ")
+	//jsonRows, _ := json.Marshal(tlist)
+	jsonRows, _ := json.MarshalIndent(tlist, "", " ")
 	fmt.Println("List of Escrow Txns Requested : ", jsonRows)
 	return jsonRows, nil
 }
