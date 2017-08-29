@@ -111,7 +111,9 @@ func (t *EscrowChaincode) Init(stub shim.ChaincodeStubInterface, function string
 
 func (t *EscrowChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
    
-   switch function {
+   switch function { 
+   	   case "GetAllTransactions":
+		   return GetAllTransactions(stub, args)
 	   case "GetLastTransaction":
 		   return GetLastTransaction(stub, args)
 	   case "GetNoOfTransactions":
@@ -231,11 +233,15 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 		fmt.Println("toJSON error: ", err)
 		return nil, err
 	}
+	
+	keys := []string{args[0]}
+	
+	err = UpdateLedger(stub, "EscrowAppTable", keys, ajson)
 	 
-    err = stub.PutState(escrowApplicationId, []byte(ajson))
+   /** err = stub.PutState(escrowApplicationId, []byte(ajson))**/
     if err != nil {
         fmt.Println("Could not save escrow application to ledger", err)
-        return nil, err
+        return ajson, err
     }
     
     var event = escrowEvent{"CreditIntoEscrowAccount", "Successfully created escrow application with ID " + escrowApplicationId}
@@ -310,9 +316,11 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 		return nil, err
 	}
 	
-	err = stub.PutState(escrowApplicationId, []byte(ajson))
+	keys := []string{args[0]}
+	err = UpdateLedger(stub, "EscrowAppTable", keys, ajson)
+	//err = stub.PutState(escrowApplicationId, []byte(ajson))
     if err != nil {
-        fmt.Println("Could not save escrow application to ledger", err)
+        fmt.Println("Could not save Tax escrow application to ledger", err)
         return nil, err
     }
 	 
@@ -342,6 +350,46 @@ func ImportEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([]byt
 /**********************************************************************************/
 /************************** Query APIs *******************************************/
 /**********************************************************************************/
+
+func GetAllTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+	rows, err := GetList(stub, "EscrowAppTable", args)
+	if err != nil {
+		return nil, fmt.Errorf("GetAllTransactions operation failed. Error marshaling JSON: %s", err)
+	}
+
+	nCol := GetNumberOfKeys("EscrowAppTable")
+
+	tlist := make([]EscrowApplication, len(rows))
+	for i := 0; i < len(rows); i++ {
+		ts := rows[i].Columns[nCol].GetBytes()
+		eApp, err := JSONtoEscrowApp(ts)
+		if err != nil {
+			fmt.Println("GetAllTransactions() Failed : Ummarshall error")
+			return nil, fmt.Errorf("GetAllTransactions() operation failed. %s", err)
+		}
+		tlist[i] = eApp
+	}
+
+	jsonRows, _ := json.Marshal(tlist)
+
+	fmt.Println("List of Escrow Txns Requested : ", jsonRows)
+	return jsonRows, nil
+}
+
+//////////////////////////////////////////////////////////
+// Converts JSON String to EscrowApplication Object
+//////////////////////////////////////////////////////////
+func JSONtoEscrowApp(areq []byte) (Bid, error) {
+
+	myHand := EscrowApplication{}
+	err := json.Unmarshal(EscrowApplication, &myHand)
+	if err != nil {
+		fmt.Println("JSONtoEscrowApp error: ", err)
+		return myHand, err
+	}
+	return myHand, err
+}
+
 func GetLastTransaction(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
     fmt.Println("Entering GetLastTransaction")
  
@@ -362,12 +410,13 @@ func GetLastTransaction(stub shim.ChaincodeStubInterface, args []string) ([]byte
 func GetNoOfTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
     fmt.Println("Entering GetNoOfTransactions")
 	
-	var escrowApplicationId = args[0]
-    bytes, err := stub.GetState(escrowApplicationId)
-	 if err != nil {
-        return nil, err
-    }
-	return bytes, nil
+	tn := "EscrowAppTable"
+	rows, err := GetList(stub, tn, args)
+	if err != nil {
+		return nil, fmt.Errorf("GetNoOfTransactions operation failed. %s", err)
+	}
+	nBids := len(rows)
+	return []byte(strconv.Itoa(nBids)), nil
 }  
 
 func GetEscrowTransactionLog(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
