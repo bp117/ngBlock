@@ -382,7 +382,7 @@ func GetAllTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byte
 func JSONtoEscrowApp(areq []byte) (EscrowApplication, error) {
 
 	myHand := EscrowApplication{}
-	err := json.Unmarshal(EscrowApplication, &myHand)
+	err := json.Unmarshal(areq, &myHand)
 	if err != nil {
 		fmt.Println("JSONtoEscrowApp error: ", err)
 		return myHand, err
