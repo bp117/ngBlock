@@ -79,7 +79,20 @@ type escrowEvent struct {
 }
 
 func (t *EscrowChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-    return nil, nil
+  log.Printf("ex02 Init\n")
+	var err error
+	if len(args) != 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 1")
+	}
+
+	// Initialize the chaincode
+	err = stub.PutState("DOCUMENT_INDEX", []byte(args[0]))
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
+
 }
 
 func (t *EscrowChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
@@ -317,7 +330,7 @@ func ImportEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([]byt
 /**********************************************************************************/
 func GetAllTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 var jsonResp string
-	
+	var docBase = "DOCUMENT-"
 	var err error
 	var logData, docIndxData []byte
 	var pageNum, pageSize, docIndx int
@@ -343,7 +356,7 @@ var jsonResp string
 
 	logData, _ = b64.StdEncoding.DecodeString(args[2])
 	log.Printf("Running read function :%s\n", string(logData))
-	docIndxData, err = stub.GetState(escrowApplicationId)
+	docIndxData, err = stub.GetState("DOCUMENT_INDEX")
 	if err != nil {
 		jsonResp := "{\"Error\":\"Failed to read Application ID\"}"
 		return nil, errors.New(jsonResp)
@@ -364,7 +377,7 @@ var jsonResp string
 	var docData []byte
 	jsonResp = "{\"transactions\":["
 	for x := indxStart; x <= indxEnd; x++ {
-		docBaseKey = strconv.Itoa(x)
+		docBaseKey = docBase + strconv.Itoa(x)
 		docData, err = stub.GetState(docBaseKey)
 		if err != nil {
 			jsonResp = "{\"Error\":\"Failed to get state for " + docBaseKey + "\"}"
