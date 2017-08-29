@@ -98,6 +98,8 @@ func (t *EscrowChaincode) Init(stub shim.ChaincodeStubInterface, function string
 func (t *EscrowChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
    
    switch function {
+	    case "GetAllTransactions":
+		   return GetAllTransactions(stub, args)	
 	   case "GetLastTransaction":
 		   return GetLastTransaction(stub, args)
 	   case "GetNoOfTransactions":
