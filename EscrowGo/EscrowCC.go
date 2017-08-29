@@ -313,6 +313,75 @@ func ImportEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([]byt
 /**********************************************************************************/
 /************************** Query APIs *******************************************/
 /**********************************************************************************/
+func GetAllTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+var jsonResp string
+	var docBase = "DOCUMENT-"
+	var err error
+	var logData, docIndxData []byte
+	var pageNum, pageSize
+       var escrowApplicationId = args[3]
+	if len(args) < 4 {
+		return nil, errors.New("Incorrect number of arguments. Expecting name of the pageNum, pageSize and LogInfo for query")
+	}
+
+	pageNum, err = strconv.Atoi(args[0])
+	if err != nil {
+		jsonResp := "{\"Error\":\"Failed to read pageNum from args 0\"}"
+		return nil, errors.New(jsonResp)
+	}
+	if pageNum > 0 {
+		pageSize, err = strconv.Atoi(args[1])
+		if err != nil {
+			jsonResp := "{\"Error\":\"Failed to read pageSize from args 1\"}"
+			return nil, errors.New(jsonResp)
+		}
+		if pageSize <= 0 {
+			pageSize = 15
+		}
+	}
+
+	logData, _ = b64.StdEncoding.DecodeString(args[2])
+	log.Printf("Running read function :%s\n", string(logData))
+	docIndxData, err = stub.GetState(escrowApplicationId)
+	if err != nil {
+		jsonResp := "{\"Error\":\"Failed to read Application ID\"}"
+		return nil, errors.New(jsonResp)
+	}
+	docIndx, err = strconv.Atoi(string(docIndxData))
+	var indxStart, indxEnd int
+	if pageNum > 0 {
+		indxStart = ((pageNum - 1) * pageSize) + 1
+		indxEnd = (indxStart + pageSize) - 1
+		if indxEnd > docIndx {
+			indxEnd = docIndx
+		}
+	} else {
+		indxStart = 1
+		indxEnd = docIndx
+	}
+	var docBaseKey string
+	var docData []byte
+	jsonResp = "{\"transactions\":["
+	for x := indxStart; x <= indxEnd; x++ {
+		docBaseKey = strconv.Itoa(x)
+		docData, err = stub.GetState(docBaseKey)
+		if err != nil {
+			jsonResp = "{\"Error\":\"Failed to get state for " + docBaseKey + "\"}"
+			return nil, errors.New(jsonResp)
+		}
+		jsonResp += "\"" + string(docData) + "\""
+		if x < indxEnd {
+			jsonResp += ","
+		}
+	}
+	jsonResp += "]}"
+
+	return []byte(jsonResp), nil
+
+
+
+}
+
 func GetLastTransaction(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
     fmt.Println("Entering GetLastTransaction")
  
