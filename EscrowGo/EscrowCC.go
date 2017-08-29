@@ -6,6 +6,7 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
 	//"os/exec"
+	"log"
 	"time"
 	"strconv"
 )
