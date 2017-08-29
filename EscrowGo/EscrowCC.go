@@ -9,6 +9,7 @@ import (
 	"log"
 	"time"
 	"strconv"
+	b64 "encoding/base64"
 )
 
 var logger = shim.NewLogger("mylogger")
