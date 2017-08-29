@@ -319,11 +319,10 @@ var jsonResp string
 	var err error
 	var logData, docIndxData []byte
 	var pageNum, pageSize
-       var escrowApplicationId = args[3]
+	var escrowApplicationId = args[3]
 	if len(args) < 4 {
 		return nil, errors.New("Incorrect number of arguments. Expecting name of the pageNum, pageSize and LogInfo for query")
 	}
-
 	pageNum, err = strconv.Atoi(args[0])
 	if err != nil {
 		jsonResp := "{\"Error\":\"Failed to read pageNum from args 0\"}"
