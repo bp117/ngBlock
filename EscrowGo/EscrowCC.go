@@ -40,7 +40,7 @@ type EscrowApplication struct {
     PropertyValue		   int					`json:"propertyValue"`
     CustomerId             string  		 		`json:"customerId"`
     CurrentBalance		   int 		 			`json:"currentBalance"`
-    TaxFinancialInfo       *TaxFinancialInfo 	`json:"taxFinancialInfo,omitempty"`
+    //TaxFinancialInfo       *TaxFinancialInfo 	`json:"taxFinancialInfo,omitempty"`
     Bank				   *Bank				`json:"bank,omitempty"`
     Source                 string        		`json:"source"`
     Status				   string				`json:"status"`
@@ -143,8 +143,8 @@ func (t *EscrowChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	switch function {
 		case "CreditIntoEscrowAccount":
 			return CreditIntoEscrowAccount(stub, args)
-		case "PerformEscrowTaxDeduction":
-			return PerformEscrowTaxDeduction(stub, args)
+		//case "PerformEscrowTaxDeduction":
+		//	return PerformEscrowTaxDeduction(stub, args)
 		case "EscrowAmountManualCredit":
 			return EscrowAmountManualCredit(stub, args)
 		case "ImportEscrowAccount":
@@ -256,7 +256,7 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
     return eventBytes, nil
 }
 
-func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+/**func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	 fmt.Println("Entering PerformEscrowTaxDeduction")
 	var result EscrowApplication 
 	
@@ -336,7 +336,7 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
     return eventBytes, nil
 	//return nil, nil
 }
-
+**/
 func EscrowAmountManualCredit(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	 fmt.Println("Entering EscrowAmountManualCredit")
 	return nil, nil
@@ -370,8 +370,8 @@ func GetAllTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byte
 		tlist[i] = eApp
 	}
 
-	jsonRows, _ := json.Marshal(tlist)
-
+	//jsonRows, _ := json.Marshal(tlist)
+	jsonRows, _ := json.MarshalIndent(tlist, "", " ")
 	fmt.Println("List of Escrow Txns Requested : ", jsonRows)
 	return jsonRows, nil
 }
