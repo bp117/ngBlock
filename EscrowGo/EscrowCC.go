@@ -661,7 +661,7 @@ func GetList(stub shim.ChaincodeStubInterface, tableName string, args []string) 
 		colNext := shim.Column{Value: &shim.Column_String_{String_: args[i]}}
 		columns = append(columns, colNext)
 	}
-
+	log.Println("Number of Keys retrieved : ", columns)
 	rowChannel, err := stub.GetRows(tableName, columns)
 	if err != nil {
 		return nil, fmt.Errorf("GetList operation failed. %s", err)
@@ -675,7 +675,7 @@ func GetList(stub shim.ChaincodeStubInterface, tableName string, args []string) 
 			} else {
 				rows = append(rows, row)
 				//If required enable for debugging
-				//fmt.Println(row)
+				log.Println("Rows data --> ", row)
 			}
 		}
 		if rowChannel == nil {
