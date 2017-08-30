@@ -359,7 +359,7 @@ var jsonResp string
 	logData, _ = b64.StdEncoding.DecodeString(args[2])
 	log.Printf("Running read function :%s\n", string(logData))
 	docIndxData, err = stub.GetState("DOCUMENT_INDEX")
-	fmt.Println(docIndxData);
+	fmt.Println(string(docIndxData));
 	if err != nil {
 		jsonResp := "{\"Error\":\"Failed to read Application ID\"}"
 		return nil, errors.New(jsonResp)
@@ -382,7 +382,10 @@ var jsonResp string
 	jsonResp = "{\"transactions\":["
 	for x := 1; x <= 5; x++ {
 		docBaseKey = docBase + strconv.Itoa(x)
+		fmt.Println(docBaseKey)
+		
 		docData, err = stub.GetState(docBaseKey)
+		fmt.Println(string(docData)
 		if err != nil {
 			jsonResp = "{\"Error\":\"Failed to get state for " + docBaseKey + "\"}"
 			return nil, errors.New(jsonResp)
