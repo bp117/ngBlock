@@ -663,6 +663,7 @@ func GetList(stub shim.ChaincodeStubInterface, tableName string, args []string) 
 	}
 	fmt.Println("Columns --> ", columns)
 	rowChannel, err := stub.GetRows(tableName, columns)
+	fmt.Println("Row channel --> ", rowChannel)
 	if err != nil {
 		return nil, fmt.Errorf("GetList operation failed. %s", err)
 	}
@@ -672,10 +673,11 @@ func GetList(stub shim.ChaincodeStubInterface, tableName string, args []string) 
 		case row, ok := <-rowChannel:
 			if !ok {
 				rowChannel = nil
+				fmt.Println("Empty Row channel")
 			} else {
 				rows = append(rows, row)
 				//If required enable for debugging
-				//fmt.Println(row)
+				fmt.Println(row)
 			}
 		}
 		if rowChannel == nil {
@@ -683,8 +685,8 @@ func GetList(stub shim.ChaincodeStubInterface, tableName string, args []string) 
 		}
 	}
 
-	log.Println("Number of Keys retrieved : ", nKeys)
-	log.Println("Number of rows retrieved : ", len(rows))
+	fmt.Println("Number of Keys retrieved : ", nKeys)
+	fmt.Println("Number of rows retrieved : ", len(rows))
 	return rows, nil
 }
  
