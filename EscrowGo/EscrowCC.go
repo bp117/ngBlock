@@ -359,13 +359,13 @@ var jsonResp string
 	logData, _ = b64.StdEncoding.DecodeString(args[2])
 	log.Printf("Running read function :%s\n", string(logData))
 	docIndxData, err = stub.GetState("DOCUMENT_INDEX")
-	fmt.println(docIndxData);
+	fmt.Println(docIndxData);
 	if err != nil {
 		jsonResp := "{\"Error\":\"Failed to read Application ID\"}"
 		return nil, errors.New(jsonResp)
 	}
 	docIndx, err = strconv.Atoi(string(docIndxData))
-	fmt.println("In AllTransactions");
+	fmt.Println("In AllTransactions");
 	var indxStart, indxEnd int
 	if pageNum > 0 {
 		indxStart = ((pageNum - 1) * pageSize) + 1
