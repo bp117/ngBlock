@@ -364,7 +364,7 @@ var jsonResp string
 		return nil, errors.New(jsonResp)
 	}
 	docIndx, err = strconv.Atoi(string(docIndxData))
-	fmt.printf("In AllTransactions");
+	fmt.Printf("In AllTransactions");
 	var indxStart, indxEnd int
 	if pageNum > 0 {
 		indxStart = ((pageNum - 1) * pageSize) + 1
