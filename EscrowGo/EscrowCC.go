@@ -6,10 +6,8 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
 	//"os/exec"
-	"log"
 	"time"
 	"strconv"
-	b64 "encoding/base64"
 )
 
 var logger = shim.NewLogger("mylogger")
@@ -47,8 +45,6 @@ type EscrowApplication struct {
     Status				   string				`json:"status"`
     LastModifiedDate       string       		`json:"lastModifiedDate"`
 }
-
-type EscrowApplicationResponse []EscrowApplication
  
 /**type BankEscrowApplication struct {   
     ParcelId               string        		`json:"parcelId"`
@@ -81,27 +77,12 @@ type escrowEvent struct {
 }
 
 func (t *EscrowChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-  log.Printf("ex02 Init\n")
-	//var err error
-	/**if len(args) != 1 {
-		return nil, errors.New("Incorrect number of arguments. Expecting 1")
-	}
-
-	// Initialize the chaincode
-	err = stub.PutState("DOCUMENT_INDEX", []byte(args[0]))
-	if err != nil {
-		return nil, err
-	}**/
-
-	return nil, nil
-
+    return nil, nil
 }
 
 func (t *EscrowChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
    
    switch function {
-	    case "GetAllTransactions":
-		   return GetAllTransactions(stub, args)	
 	   case "GetLastTransaction":
 		   return GetLastTransaction(stub, args)
 	   case "GetNoOfTransactions":
@@ -245,15 +226,15 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 	var result EscrowApplication 
 	
 	var escrowApplicationId = args[0]
-    buff, err := stub.GetState(escrowApplicationId)
+    bytes, err := stub.GetState(escrowApplicationId)
     if err != nil {
         fmt.Println("Could not fetch escrow application with id "+escrowApplicationId+" from ledger", err)
         return nil, err
     }
 	 
-	ea := []EscrowApplication
+	ea :=  EscrowApplication{}
 	
-	if err := json.Unmarshal([]byte(buff), &ea); err != nil {
+	if err := json.Unmarshal(bytes, &ea); err != nil {
         fmt.Println("JSON to EscrowApplication error: ", err)
 		return nil, err
     }
@@ -332,79 +313,6 @@ func ImportEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([]byt
 /**********************************************************************************/
 /************************** Query APIs *******************************************/
 /**********************************************************************************/
-func GetAllTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-var jsonResp string
-	var docBase = "escrowId"
-	var err error
-	var logData, docIndxData []byte
-	var pageNum, pageSize, docIndx int
-	//var escrowApplicationId = args[3]
-	if len(args) < 4 {
-		return nil, errors.New("Incorrect number of arguments. Expecting name of the pageNum, pageSize and LogInfo for query")
-	}
-	pageNum, err = strconv.Atoi(args[0])
-	if err != nil {
-		jsonResp := "{\"Error\":\"Failed to read pageNum from args 0\"}"
-		return nil, errors.New(jsonResp)
-	}
-	if pageNum > 0 {
-		pageSize, err = strconv.Atoi(args[1])
-		if err != nil {
-			jsonResp := "{\"Error\":\"Failed to read pageSize from args 1\"}"
-			return nil, errors.New(jsonResp)
-		}
-		if pageSize <= 0 {
-			pageSize = 15
-		}
-	}
-
-	logData, _ = b64.StdEncoding.DecodeString(args[2])
-	log.Printf("Running read function :%s\n", string(logData))
-	docIndxData, err = stub.GetState("DOCUMENT_INDEX")
-	fmt.Println(string(docIndxData));
-	if err != nil {
-		jsonResp := "{\"Error\":\"Failed to read Application ID\"}"
-		return nil, errors.New(jsonResp)
-	}
-	docIndx, err = strconv.Atoi(string(docIndxData))
-	fmt.Println("In AllTransactions");
-	var indxStart, indxEnd int
-	if pageNum > 0 {
-		indxStart = ((pageNum - 1) * pageSize) + 1
-		indxEnd = (indxStart + pageSize) - 1
-		if indxEnd > docIndx {
-			indxEnd = docIndx
-		}
-	} else {
-		indxStart = 1
-		indxEnd = docIndx
-	}
-	var docBaseKey string
-	var docData []byte
-	jsonResp = "{\"transactions\":["
-	for x := 1; x <= 5; x++ {
-		docBaseKey = docBase + strconv.Itoa(x)
-		//fmt.Println(docBaseKey)
-		
-		docData, err = stub.GetState(docBaseKey)
-	//	fmt.Println(string(docData)
-		if err != nil {
-			jsonResp = "{\"Error\":\"Failed to get state for " + docBaseKey + "\"}"
-			return nil, errors.New(jsonResp)
-		}
-		jsonResp += "\"" + string(docData) + "\""
-		if x < indxEnd {
-			jsonResp += ","
-		}
-	}
-	jsonResp += "]}"
-
-	return []byte(jsonResp), nil
-
-
-
-}
-
 func GetLastTransaction(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
     fmt.Println("Entering GetLastTransaction")
  
