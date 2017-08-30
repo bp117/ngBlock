@@ -6,16 +6,16 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	"encoding/json"
 	//"os/exec"
+	"log"
 	"time"
 	"strconv"
-	"log"
+	b64 "encoding/base64"
 )
 
 var logger = shim.NewLogger("mylogger")
 
 // This could be stored on a blockchain table or an application
 var statusType = []string{"NEW", "TAX_DEDUCTED", "AMOUNT_CREDITED", "CLOSED"}
-var escrowTables = []string{"EscrowAppTable"}
 
 type EscrowChaincode struct {
 }
@@ -46,14 +46,6 @@ type EscrowApplication struct {
     Source                 string        		`json:"source"`
     Status				   string				`json:"status"`
     LastModifiedDate       string       		`json:"lastModifiedDate"`
-}
-
-func GetNumberOfKeys(tname string) int {
-	TableMap := map[string]int{
-		"EscrowAppTable":        1,
-		
-	}
-	return TableMap[tname]
 }
  
 /**type BankEscrowApplication struct {   
@@ -87,34 +79,27 @@ type escrowEvent struct {
 }
 
 func (t *EscrowChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-	fmt.Println("[Escrow Application] Init")
+  log.Printf("ex02 Init\n")
 	var err error
-	
-	for _, val := range escrowTables {
-		err = stub.DeleteTable(val)
-		if err != nil {
-			return nil, fmt.Errorf("Init(): DeleteTable of %s  Failed ", val)
-		}
-		err = InitLedger(stub, val)
-		if err != nil {
-			return nil, fmt.Errorf("Init(): InitLedger of %s  Failed ", val)
-		}
+	if len(args) != 1 {
+		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
-	// Update the ledger with the Application version
-	err = stub.PutState("version", []byte(strconv.Itoa(1)))
+
+	// Initialize the chaincode
+	err = stub.PutState("DOCUMENT_INDEX", []byte(args[0]))
 	if err != nil {
 		return nil, err
 	}
 
-	fmt.Println("Init() Initialization Complete  : ", args)
-	return []byte("Init(): Initialization Complete"), nil
+	return nil, nil
+
 }
 
 func (t *EscrowChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
    
-   switch function { 
-   	   case "GetAllTransactions":
-		   return GetAllTransactions(stub, args)
+   switch function {
+	    case "GetAllTransactions":
+		   return GetAllTransactions(stub, args)	
 	   case "GetLastTransaction":
 		   return GetLastTransaction(stub, args)
 	   case "GetNoOfTransactions":
@@ -144,8 +129,8 @@ func (t *EscrowChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	switch function {
 		case "CreditIntoEscrowAccount":
 			return CreditIntoEscrowAccount(stub, args)
-		//case "PerformEscrowTaxDeduction":
-		//	return PerformEscrowTaxDeduction(stub, args)
+		case "PerformEscrowTaxDeduction":
+			return PerformEscrowTaxDeduction(stub, args)
 		case "EscrowAmountManualCredit":
 			return EscrowAmountManualCredit(stub, args)
 		case "ImportEscrowAccount":
@@ -178,7 +163,7 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
     fmt.Println("Entering CreditIntoEscrowAccount")
 	var result EscrowApplication
     if len(args) != 8 {
-        log.Println("Invalid input args")
+        fmt.Println("Invalid input args")
         return nil, errors.New("Expected the escrow details for Escrow Block creation")
     }
  
@@ -231,18 +216,14 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 	//ajson, err := json.Marshal(escrowApplicationInput)
 	ajson, err := json.MarshalIndent(result, "", " ")
 	if err != nil {
-		log.Println("toJSON error: ", err)
+		fmt.Println("toJSON error: ", err)
 		return nil, err
 	}
-	
-	keys := []string{args[0]}
-	
-	err = UpdateLedger(stub, "EscrowAppTable", keys, ajson)
 	 
-   /** err = stub.PutState(escrowApplicationId, []byte(ajson))**/
+    err = stub.PutState(escrowApplicationId, []byte(ajson))
     if err != nil {
-        log.Println("Could not save escrow application to ledger", err)
-        return ajson, err
+        fmt.Println("Could not save escrow application to ledger", err)
+        return nil, err
     }
     
     var event = escrowEvent{"CreditIntoEscrowAccount", "Successfully created escrow application with ID " + escrowApplicationId}
@@ -253,7 +234,7 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
         return nil, err
     }
     
-    log.Println("Successfully saved escrow application")
+    fmt.Println("Successfully saved escrow application")
     return eventBytes, nil
 }
 
@@ -293,7 +274,9 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
     taxCurBal, err := strconv.Atoi(ea.TaxFinancialInfo.TaxCurrentBalance)
     if err != nil {
 		fmt.Println("Int conversion error: ", err)
-		return nil, err
+		taxCurBal = 0
+	} else {
+	    taxCurBal = strconv.Atoi(taxCurBal)
 	}
 	
 	var amtCredited = (taxPer * ea.PropertyValue) / 100
@@ -317,11 +300,9 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 		return nil, err
 	}
 	
-	keys := []string{args[0]}
-	err = UpdateLedger(stub, "EscrowAppTable", keys, ajson)
-	//err = stub.PutState(escrowApplicationId, []byte(ajson))
+	err = stub.PutState(escrowApplicationId, []byte(ajson))
     if err != nil {
-        fmt.Println("Could not save Tax escrow application to ledger", err)
+        fmt.Println("Could not save escrow application to ledger", err)
         return nil, err
     }
 	 
@@ -351,44 +332,77 @@ func ImportEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([]byt
 /**********************************************************************************/
 /************************** Query APIs *******************************************/
 /**********************************************************************************/
-
 func GetAllTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
-	rows, err := GetList(stub, "EscrowAppTable", args)
-	if err != nil {
-		return nil, fmt.Errorf("GetAllTransactions operation failed. Error marshaling JSON: %s", err)
+var jsonResp string
+	var docBase = "escrowId"
+	var err error
+	var logData, docIndxData []byte
+	var pageNum, pageSize, docIndx int
+	//var escrowApplicationId = args[3]
+	if len(args) < 4 {
+		return nil, errors.New("Incorrect number of arguments. Expecting name of the pageNum, pageSize and LogInfo for query")
 	}
-
-	nCol := GetNumberOfKeys("EscrowAppTable")
-
-	tlist := make([]EscrowApplication, len(rows))
-	for i := 0; i < len(rows); i++ {
-		ts := rows[i].Columns[nCol].GetBytes()
-		eApp, err := JSONtoEscrowApp(ts)
+	pageNum, err = strconv.Atoi(args[0])
+	if err != nil {
+		jsonResp := "{\"Error\":\"Failed to read pageNum from args 0\"}"
+		return nil, errors.New(jsonResp)
+	}
+	if pageNum > 0 {
+		pageSize, err = strconv.Atoi(args[1])
 		if err != nil {
-			log.Println("GetAllTransactions() Failed : Ummarshall error")
-			return nil, fmt.Errorf("GetAllTransactions() operation failed. %s", err)
+			jsonResp := "{\"Error\":\"Failed to read pageSize from args 1\"}"
+			return nil, errors.New(jsonResp)
 		}
-		tlist[i] = eApp
+		if pageSize <= 0 {
+			pageSize = 15
+		}
 	}
 
-	//jsonRows, _ := json.Marshal(tlist)
-	jsonRows, _ := json.MarshalIndent(tlist, "", " ")
-	log.Println("List of Escrow Txns Requested : ", jsonRows)
-	return jsonRows, nil
-}
-
-//////////////////////////////////////////////////////////
-// Converts JSON String to EscrowApplication Object
-//////////////////////////////////////////////////////////
-func JSONtoEscrowApp(areq []byte) (EscrowApplication, error) {
-
-	myHand := EscrowApplication{}
-	err := json.Unmarshal(areq, &myHand)
+	logData, _ = b64.StdEncoding.DecodeString(args[2])
+	log.Printf("Running read function :%s\n", string(logData))
+	docIndxData, err = stub.GetState("DOCUMENT_INDEX")
+	fmt.Println(string(docIndxData));
 	if err != nil {
-		log.Println("JSONtoEscrowApp error: ", err)
-		return myHand, err
+		jsonResp := "{\"Error\":\"Failed to read Application ID\"}"
+		return nil, errors.New(jsonResp)
 	}
-	return myHand, err
+	docIndx, err = strconv.Atoi(string(docIndxData))
+	fmt.Println("In AllTransactions");
+	var indxStart, indxEnd int
+	if pageNum > 0 {
+		indxStart = ((pageNum - 1) * pageSize) + 1
+		indxEnd = (indxStart + pageSize) - 1
+		if indxEnd > docIndx {
+			indxEnd = docIndx
+		}
+	} else {
+		indxStart = 1
+		indxEnd = docIndx
+	}
+	var docBaseKey string
+	var docData []byte
+	jsonResp = "{\"transactions\":["
+	for x := 1; x <= 5; x++ {
+		docBaseKey = docBase + strconv.Itoa(x)
+		//fmt.Println(docBaseKey)
+		
+		docData, err = stub.GetState(docBaseKey)
+	//	fmt.Println(string(docData)
+		if err != nil {
+			jsonResp = "{\"Error\":\"Failed to get state for " + docBaseKey + "\"}"
+			return nil, errors.New(jsonResp)
+		}
+		jsonResp += "\"" + string(docData) + "\""
+		if x < indxEnd {
+			jsonResp += ","
+		}
+	}
+	jsonResp += "]}"
+
+	return []byte(jsonResp), nil
+
+
+
 }
 
 func GetLastTransaction(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
@@ -411,13 +425,12 @@ func GetLastTransaction(stub shim.ChaincodeStubInterface, args []string) ([]byte
 func GetNoOfTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
     fmt.Println("Entering GetNoOfTransactions")
 	
-	tn := "EscrowAppTable"
-	rows, err := GetList(stub, tn, args)
-	if err != nil {
-		return nil, fmt.Errorf("GetNoOfTransactions operation failed. %s", err)
-	}
-	nBids := len(rows)
-	return []byte(strconv.Itoa(nBids)), nil
+	var escrowApplicationId = args[0]
+    bytes, err := stub.GetState(escrowApplicationId)
+	 if err != nil {
+        return nil, err
+    }
+	return bytes, nil
 }  
 
 func GetEscrowTransactionLog(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
@@ -523,172 +536,7 @@ func GetCertAttribute(stub shim.ChaincodeStubInterface, attributeName string) (s
 }
 **/
  
- func InitLedger(stub shim.ChaincodeStubInterface, tableName string) error {
 
-	// Generic Table Creation Function - requires Table Name and Table Key Entry
-	// Create Table - Get number of Keys the tables supports
-	// This version assumes all Keys are String and the Data is Bytes	
-
-	nKeys := GetNumberOfKeys(tableName)
-	if nKeys < 1 {
-		log.Println("Atleast 1 Key must be provided \n")
-		log.Println("Escrow_Application: Failed creating Table ", tableName)
-		return errors.New("Escrow_Application: Failed creating Table " + tableName)
-	}
-
-	var columnDefsForTbl []*shim.ColumnDefinition
-
-	for i := 0; i < nKeys; i++ {
-		columnDef := shim.ColumnDefinition{Name: "keyName" + strconv.Itoa(i), Type: shim.ColumnDefinition_STRING, Key: true}
-		columnDefsForTbl = append(columnDefsForTbl, &columnDef)
-	}
-
-	columnLastTblDef := shim.ColumnDefinition{Name: "Details", Type: shim.ColumnDefinition_BYTES, Key: false}
-	columnDefsForTbl = append(columnDefsForTbl, &columnLastTblDef)
-
-	// Create the Table (Nil is returned if the Table exists or if the table is created successfully
-	err := stub.CreateTable(tableName, columnDefsForTbl)
-
-	if err != nil {
-		log.Println("Escrow_Application: Failed creating Table ", tableName)
-		return errors.New("Escrow_Application: Failed creating Table " + tableName)
-	}
-
-	return err
-}
-
-
-func UpdateLedger(stub shim.ChaincodeStubInterface, tableName string, keys []string, args []byte) error {
-
-	nKeys := GetNumberOfKeys(tableName)
-	if nKeys < 1 {
-		fmt.Println("Atleast 1 Key must be provided \n")
-	}
-
-	var columns []*shim.Column
-
-	for i := 0; i < nKeys; i++ {
-		col := shim.Column{Value: &shim.Column_String_{String_: keys[i]}}
-		columns = append(columns, &col)
-	}
-
-	lastCol := shim.Column{Value: &shim.Column_Bytes{Bytes: []byte(args)}}
-	columns = append(columns, &lastCol)
-
-	row := shim.Row{columns}
-	ok, err := stub.InsertRow(tableName, row)
-	if err != nil {
-		return fmt.Errorf("UpdateLedger: InsertRow into "+tableName+" Table operation failed. %s", err)
-	}
-	if !ok {
-		return errors.New("UpdateLedger: InsertRow into " + tableName + " Table failed. Row with given key " + keys[0] + " already exists")
-	}
-
-	log.Println("UpdateLedger: InsertRow into ", tableName, " Table operation Successful. ")
-	return nil
-}
-
-func DeleteFromLedger(stub shim.ChaincodeStubInterface, tableName string, keys []string) error {
-	var columns []shim.Column
-
-	//nKeys := GetNumberOfKeys(tableName)
-	nCol := len(keys)
-	if nCol < 1 {
-		fmt.Println("Atleast 1 Key must be provided \n")
-		return errors.New("DeleteFromLedger failed. Must include at least key values")
-	}
-
-	for i := 0; i < nCol; i++ {
-		colNext := shim.Column{Value: &shim.Column_String_{String_: keys[i]}}
-		columns = append(columns, colNext)
-	}
-
-	err := stub.DeleteRow(tableName, columns)
-	if err != nil {
-		return fmt.Errorf("DeleteFromLedger operation failed. %s", err)
-	}
-
-	log.Println("DeleteFromLedger: DeleteRow from ", tableName, " Table operation Successful. ")
-	return nil
-}
-
-func QueryLedger(stub shim.ChaincodeStubInterface, tableName string, args []string) ([]byte, error) {
-
-	var columns []shim.Column
-	nCol := GetNumberOfKeys(tableName)
-	for i := 0; i < nCol; i++ {
-		colNext := shim.Column{Value: &shim.Column_String_{String_: args[i]}}
-		columns = append(columns, colNext)
-	}
-
-	row, err := stub.GetRow(tableName, columns)
-	fmt.Println("Length or number of rows retrieved ", len(row.Columns))
-
-	if len(row.Columns) == 0 {
-		jsonResp := "{\"Error\":\"Failed retrieving data " + args[0] + ". \"}"
-		fmt.Println("Error retrieving data record for Key = ", args[0], "Error : ", jsonResp)
-		return nil, errors.New(jsonResp)
-	}
-
-	//fmt.Println("User Query Response:", row)
-	//jsonResp := "{\"Owner\":\"" + string(row.Columns[nCol].GetBytes()) + "\"}"
-	//fmt.Println("User Query Response:%s\n", jsonResp)
-	Avalbytes := row.Columns[nCol].GetBytes()
-
-	// Perform Any additional processing of data
-	fmt.Println("QueryLedger() : Successful - Proceeding to ProcessRequestType ")
-	//err = ProcessQueryResult(stub, Avalbytes, args)
-	if err != nil {
-		fmt.Println("QueryLedger() : Cannot create object  : ", args[1])
-		jsonResp := "{\"QueryLedger() Error\":\" Cannot create Object for key " + args[0] + "\"}"
-		return nil, errors.New(jsonResp)
-	}
-	return Avalbytes, nil
-}
-
-func GetList(stub shim.ChaincodeStubInterface, tableName string, args []string) ([]shim.Row, error) {
-	var columns []shim.Column
-
-	nKeys := GetNumberOfKeys(tableName)
-	log.Println("Hello")
-	nCol := len(args)
-	if nCol < 1 {
-		log.Println("Atleast 1 Key must be provided \n")
-		return nil, errors.New("GetList failed. Must include at least key values")
-	}
-
-	for i := 0; i < nCol; i++ {
-		colNext := shim.Column{Value: &shim.Column_String_{String_: args[i]}}
-		columns = append(columns, colNext)
-	}
-	fmt.Println("Columns --> ", columns)
-	rowChannel, err := stub.GetRows(tableName, columns)
-	fmt.Println("Row channel --> ", rowChannel)
-	if err != nil {
-		return nil, fmt.Errorf("GetList operation failed. %s", err)
-	}
-	var rows []shim.Row
-	for {
-		select {
-		case row, ok := <-rowChannel:
-			if !ok {
-				rowChannel = nil
-				fmt.Println("Empty Row channel")
-			} else {
-				rows = append(rows, row)
-				//If required enable for debugging
-				fmt.Println(row)
-			}
-		}
-		if rowChannel == nil {
-			break
-		}
-	}
-
-	fmt.Println("Number of Keys retrieved : ", nKeys)
-	fmt.Println("Number of rows retrieved : ", len(rows))
-	return rows, nil
-}
  
 func main() {
 	lld, _ := shim.LogLevel("DEBUG")
