@@ -8,6 +8,7 @@ import (
 	//"os/exec"
 	"time"
 	"strconv"
+	"log"
 )
 
 var logger = shim.NewLogger("mylogger")
@@ -40,7 +41,7 @@ type EscrowApplication struct {
     PropertyValue		   int					`json:"propertyValue"`
     CustomerId             string  		 		`json:"customerId"`
     CurrentBalance		   int 		 			`json:"currentBalance"`
-    TaxFinancialInfo       *TaxFinancialInfo 	`json:"taxFinancialInfo,omitempty"`
+    //TaxFinancialInfo       *TaxFinancialInfo 	`json:"taxFinancialInfo,omitempty"`
     Bank				   *Bank				`json:"bank,omitempty"`
     Source                 string        		`json:"source"`
     Status				   string				`json:"status"`
@@ -143,8 +144,8 @@ func (t *EscrowChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 	switch function {
 		case "CreditIntoEscrowAccount":
 			return CreditIntoEscrowAccount(stub, args)
-		case "PerformEscrowTaxDeduction":
-			return PerformEscrowTaxDeduction(stub, args)
+		//case "PerformEscrowTaxDeduction":
+		//	return PerformEscrowTaxDeduction(stub, args)
 		case "EscrowAmountManualCredit":
 			return EscrowAmountManualCredit(stub, args)
 		case "ImportEscrowAccount":
@@ -177,7 +178,7 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
     fmt.Println("Entering CreditIntoEscrowAccount")
 	var result EscrowApplication
     if len(args) != 8 {
-        fmt.Println("Invalid input args")
+        log.Println("Invalid input args")
         return nil, errors.New("Expected the escrow details for Escrow Block creation")
     }
  
@@ -230,7 +231,7 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 	//ajson, err := json.Marshal(escrowApplicationInput)
 	ajson, err := json.MarshalIndent(result, "", " ")
 	if err != nil {
-		fmt.Println("toJSON error: ", err)
+		log.Println("toJSON error: ", err)
 		return nil, err
 	}
 	
@@ -240,7 +241,7 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 	 
    /** err = stub.PutState(escrowApplicationId, []byte(ajson))**/
     if err != nil {
-        fmt.Println("Could not save escrow application to ledger", err)
+        log.Println("Could not save escrow application to ledger", err)
         return ajson, err
     }
     
@@ -252,11 +253,11 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
         return nil, err
     }
     
-    fmt.Println("Successfully saved escrow application")
+    log.Println("Successfully saved escrow application")
     return eventBytes, nil
 }
 
-func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
+/**func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	 fmt.Println("Entering PerformEscrowTaxDeduction")
 	var result EscrowApplication 
 	
@@ -336,7 +337,7 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
     return eventBytes, nil
 	//return nil, nil
 }
-
+**/
 func EscrowAmountManualCredit(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	 fmt.Println("Entering EscrowAmountManualCredit")
 	return nil, nil
@@ -364,15 +365,15 @@ func GetAllTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byte
 		ts := rows[i].Columns[nCol].GetBytes()
 		eApp, err := JSONtoEscrowApp(ts)
 		if err != nil {
-			fmt.Println("GetAllTransactions() Failed : Ummarshall error")
+			log.Println("GetAllTransactions() Failed : Ummarshall error")
 			return nil, fmt.Errorf("GetAllTransactions() operation failed. %s", err)
 		}
 		tlist[i] = eApp
 	}
 
-	jsonRows, _ := json.Marshal(tlist)
-
-	fmt.Println("List of Escrow Txns Requested : ", jsonRows)
+	//jsonRows, _ := json.Marshal(tlist)
+	jsonRows, _ := json.MarshalIndent(tlist, "", " ")
+	log.Println("List of Escrow Txns Requested : ", jsonRows)
 	return jsonRows, nil
 }
 
@@ -384,7 +385,7 @@ func JSONtoEscrowApp(areq []byte) (EscrowApplication, error) {
 	myHand := EscrowApplication{}
 	err := json.Unmarshal(areq, &myHand)
 	if err != nil {
-		fmt.Println("JSONtoEscrowApp error: ", err)
+		log.Println("JSONtoEscrowApp error: ", err)
 		return myHand, err
 	}
 	return myHand, err
@@ -530,8 +531,8 @@ func GetCertAttribute(stub shim.ChaincodeStubInterface, attributeName string) (s
 
 	nKeys := GetNumberOfKeys(tableName)
 	if nKeys < 1 {
-		fmt.Println("Atleast 1 Key must be provided \n")
-		fmt.Println("Escrow_Application: Failed creating Table ", tableName)
+		log.Println("Atleast 1 Key must be provided \n")
+		log.Println("Escrow_Application: Failed creating Table ", tableName)
 		return errors.New("Escrow_Application: Failed creating Table " + tableName)
 	}
 
@@ -549,7 +550,7 @@ func GetCertAttribute(stub shim.ChaincodeStubInterface, attributeName string) (s
 	err := stub.CreateTable(tableName, columnDefsForTbl)
 
 	if err != nil {
-		fmt.Println("Escrow_Application: Failed creating Table ", tableName)
+		log.Println("Escrow_Application: Failed creating Table ", tableName)
 		return errors.New("Escrow_Application: Failed creating Table " + tableName)
 	}
 
@@ -583,7 +584,7 @@ func UpdateLedger(stub shim.ChaincodeStubInterface, tableName string, keys []str
 		return errors.New("UpdateLedger: InsertRow into " + tableName + " Table failed. Row with given key " + keys[0] + " already exists")
 	}
 
-	fmt.Println("UpdateLedger: InsertRow into ", tableName, " Table operation Successful. ")
+	log.Println("UpdateLedger: InsertRow into ", tableName, " Table operation Successful. ")
 	return nil
 }
 
@@ -607,7 +608,7 @@ func DeleteFromLedger(stub shim.ChaincodeStubInterface, tableName string, keys [
 		return fmt.Errorf("DeleteFromLedger operation failed. %s", err)
 	}
 
-	fmt.Println("DeleteFromLedger: DeleteRow from ", tableName, " Table operation Successful. ")
+	log.Println("DeleteFromLedger: DeleteRow from ", tableName, " Table operation Successful. ")
 	return nil
 }
 
@@ -649,9 +650,10 @@ func GetList(stub shim.ChaincodeStubInterface, tableName string, args []string) 
 	var columns []shim.Column
 
 	nKeys := GetNumberOfKeys(tableName)
+	log.Println("Hello")
 	nCol := len(args)
 	if nCol < 1 {
-		fmt.Println("Atleast 1 Key must be provided \n")
+		log.Println("Atleast 1 Key must be provided \n")
 		return nil, errors.New("GetList failed. Must include at least key values")
 	}
 
@@ -681,8 +683,8 @@ func GetList(stub shim.ChaincodeStubInterface, tableName string, args []string) 
 		}
 	}
 
-	fmt.Println("Number of Keys retrieved : ", nKeys)
-	fmt.Println("Number of rows retrieved : ", len(rows))
+	log.Println("Number of Keys retrieved : ", nKeys)
+	log.Println("Number of rows retrieved : ", len(rows))
 	return rows, nil
 }
  
