@@ -271,7 +271,7 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 		return nil, err
 	}
     
-    taxCurBal, err := strconv.Atoi(ea.TaxFinancialInfo.TaxCurrentBalance)
+    taxCurBal, err := ea.TaxFinancialInfo.TaxCurrentBalance
     if err != nil {
 		fmt.Println("Int conversion error: ", err)
 		taxCurBal = 0
