@@ -379,7 +379,7 @@ var jsonResp string
 	var docBaseKey string
 	var docData []byte
 	jsonResp = "{\"transactions\":["
-	for x := indxStart; x <= indxEnd; x++ {
+	for x := 1; x <= 5; x++ {
 		docBaseKey = docBase + strconv.Itoa(x)
 		docData, err = stub.GetState(docBaseKey)
 		if err != nil {
