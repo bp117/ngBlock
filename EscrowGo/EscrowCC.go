@@ -274,7 +274,7 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
     taxCurBal, err := strconv.Atoi(ea.TaxFinancialInfo.TaxCurrentBalance)
     if err != nil {
 		fmt.Println("Int conversion error: ", err)
-		taxCurBal = 0
+		return nil, err
 	}
 	
 	var amtCredited = (taxPer * ea.PropertyValue) / 100
@@ -359,12 +359,13 @@ var jsonResp string
 	logData, _ = b64.StdEncoding.DecodeString(args[2])
 	log.Printf("Running read function :%s\n", string(logData))
 	docIndxData, err = stub.GetState("DOCUMENT_INDEX")
+	fmt.Println(string(docIndxData));
 	if err != nil {
 		jsonResp := "{\"Error\":\"Failed to read Application ID\"}"
 		return nil, errors.New(jsonResp)
 	}
 	docIndx, err = strconv.Atoi(string(docIndxData))
-	fmt.Printf("In AllTransactions");
+	fmt.Println("In AllTransactions");
 	var indxStart, indxEnd int
 	if pageNum > 0 {
 		indxStart = ((pageNum - 1) * pageSize) + 1
@@ -381,7 +382,10 @@ var jsonResp string
 	jsonResp = "{\"transactions\":["
 	for x := 1; x <= 5; x++ {
 		docBaseKey = docBase + strconv.Itoa(x)
+		//fmt.Println(docBaseKey)
+		
 		docData, err = stub.GetState(docBaseKey)
+	//	fmt.Println(string(docData)
 		if err != nil {
 			jsonResp = "{\"Error\":\"Failed to get state for " + docBaseKey + "\"}"
 			return nil, errors.New(jsonResp)
