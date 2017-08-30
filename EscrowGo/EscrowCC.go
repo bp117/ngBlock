@@ -382,10 +382,10 @@ var jsonResp string
 	jsonResp = "{\"transactions\":["
 	for x := 1; x <= 5; x++ {
 		docBaseKey = docBase + strconv.Itoa(x)
-		fmt.Println(docBaseKey)
+		//fmt.Println(docBaseKey)
 		
 		docData, err = stub.GetState(docBaseKey)
-		fmt.Println(string(docData)
+	//	fmt.Println(string(docData)
 		if err != nil {
 			jsonResp = "{\"Error\":\"Failed to get state for " + docBaseKey + "\"}"
 			return nil, errors.New(jsonResp)
