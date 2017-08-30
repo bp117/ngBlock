@@ -47,6 +47,8 @@ type EscrowApplication struct {
     Status				   string				`json:"status"`
     LastModifiedDate       string       		`json:"lastModifiedDate"`
 }
+
+type EscrowApplicationResponse []EscrowApplication
  
 /**type BankEscrowApplication struct {   
     ParcelId               string        		`json:"parcelId"`
@@ -243,15 +245,15 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 	var result EscrowApplication 
 	
 	var escrowApplicationId = args[0]
-    bytes, err := stub.GetState(escrowApplicationId)
+    buff, err := stub.GetState(escrowApplicationId)
     if err != nil {
         fmt.Println("Could not fetch escrow application with id "+escrowApplicationId+" from ledger", err)
         return nil, err
     }
 	 
-	ea :=  EscrowApplication{}
+	ea := []EscrowApplication
 	
-	if err := json.Unmarshal(bytes, &ea); err != nil {
+	if err := json.Unmarshal([]byte(buff), &ea); err != nil {
         fmt.Println("JSON to EscrowApplication error: ", err)
 		return nil, err
     }
