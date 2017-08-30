@@ -59,6 +59,7 @@ type EscrowApplication struct {
     Status				   string				`json:"status"`
     LastModifiedDate       string       		`json:"lastModifiedDate"`
 }
+
 type TaxEscrowApplication struct {   
     ParcelId               string        		`json:"parcelId"`
     PropertyValue		   int					`json:"propertyValue"`
@@ -358,12 +359,13 @@ var jsonResp string
 	logData, _ = b64.StdEncoding.DecodeString(args[2])
 	log.Printf("Running read function :%s\n", string(logData))
 	docIndxData, err = stub.GetState("DOCUMENT_INDEX")
+	fmt.Println(string(docIndxData));
 	if err != nil {
 		jsonResp := "{\"Error\":\"Failed to read Application ID\"}"
 		return nil, errors.New(jsonResp)
 	}
 	docIndx, err = strconv.Atoi(string(docIndxData))
-	fmt.Printf("In AllTransactions");
+	fmt.Println("In AllTransactions");
 	var indxStart, indxEnd int
 	if pageNum > 0 {
 		indxStart = ((pageNum - 1) * pageSize) + 1
@@ -380,7 +382,10 @@ var jsonResp string
 	jsonResp = "{\"transactions\":["
 	for x := 1; x <= 5; x++ {
 		docBaseKey = docBase + strconv.Itoa(x)
+		//fmt.Println(docBaseKey)
+		
 		docData, err = stub.GetState(docBaseKey)
+	//	fmt.Println(string(docData)
 		if err != nil {
 			jsonResp = "{\"Error\":\"Failed to get state for " + docBaseKey + "\"}"
 			return nil, errors.New(jsonResp)
@@ -472,14 +477,18 @@ func GetParcelPayments(stub shim.ChaincodeStubInterface, args []string) ([]byte,
 
 /**
 Updates the status of the Escrow application
+
 func UpdateEscrowApplication(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	logger.Debug("Entering UpdateEscrowApplication")
+
 	if len(args) < 2 {
 		logger.Error("Invalid number of args")
 		return nil, errors.New("Expected atleast two arguments for escrow application update")
 	}
+
 	var escrowApplicationId = args[0]
 	var status = args[1]
+
 	eaBytes, err := stub.GetState(escrowApplicationId)
 	if err != nil {
 		logger.Error("Could not fetch escrow application from ledger", err)
@@ -488,16 +497,19 @@ func UpdateEscrowApplication(stub shim.ChaincodeStubInterface, args []string) ([
 	var escrowApplication EscrowApplication
 	err = json.Unmarshal(eaBytes, &escrowApplication)
 	escrowApplication.Status = status
+
 	eaBytes, err = json.Marshal(&escrowApplication)
 	if err != nil {
 		logger.Error("Could not marshal escrow application post update", err)
 		return nil, err
 	}
+
 	err = stub.PutState(escrowApplicationId, eaBytes)
 	if err != nil {
 		logger.Error("Could not save escrow application post update", err)
 		return nil, err
 	}
+
 	var escrowEvent = "{eventType: 'escrowApplicationUpdate', description:" + escrowApplicationId + "' Successfully updated status'}"
 	err = stub.SetEvent("evtSender", []byte(escrowEvent))
 	if err != nil {
@@ -505,6 +517,7 @@ func UpdateEscrowApplication(stub shim.ChaincodeStubInterface, args []string) ([
 	}
 	logger.Info("Successfully updated escrow application")
 	return nil, nil
+
 }
 **/
 
