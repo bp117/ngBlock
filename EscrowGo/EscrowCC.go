@@ -332,7 +332,7 @@ func ImportEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([]byt
 /**********************************************************************************/
 func GetAllTransactions(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 var jsonResp string
-	var docBase = "DOCUMENT-"
+	var docBase = "escrowId"
 	var err error
 	var logData, docIndxData []byte
 	var pageNum, pageSize, docIndx int
@@ -364,6 +364,7 @@ var jsonResp string
 		return nil, errors.New(jsonResp)
 	}
 	docIndx, err = strconv.Atoi(string(docIndxData))
+	fmt.printf("In AllTransactions");
 	var indxStart, indxEnd int
 	if pageNum > 0 {
 		indxStart = ((pageNum - 1) * pageSize) + 1
