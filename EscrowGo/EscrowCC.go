@@ -80,7 +80,7 @@ type escrowEvent struct {
 
 func (t *EscrowChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
   log.Printf("ex02 Init\n")
-	var err error
+	//var err error
 	/**if len(args) != 1 {
 		return nil, errors.New("Incorrect number of arguments. Expecting 1")
 	}
