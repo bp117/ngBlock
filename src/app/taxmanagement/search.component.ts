@@ -6,11 +6,17 @@ import {Component,Input} from "@angular/core";
 
 })
 export class SearchComponent{
- @Input() states :any;   
+ @Input() addrList :any;  
+   messages: any = []; 
   ledgerFormVisible : boolean = false;
     
+   
     openLedger(){
         this.ledgerFormVisible = true;
         console.log("testing ledger");
-        }
+    }
+     ngOnChanges(){
+       console.log("County",this.addrList);
+     }
+
 }

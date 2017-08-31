@@ -14,18 +14,13 @@
 	                                    	<th>Tax %</th>											
 	                                    </thead>
 	                                    <tbody>
-	                                        <tr>
-	                                        	<td><a  (click)="openLedger();">Address1</a></td>
-	                                        	<td>County1</td>
-	                                        	<td>State1</td>	
-	                                        	<td>7</td>											
+	                                        <tr *ngFor="let d of addrList">
+	                                        	<td><a  (click)="openLedger();">{{d.Address}}</a></td>
+	                                        	<td>{{d.county}}</td>
+	                                        	<td>{{d.state}}</td>	
+	                                        	<td>{{d.tax}}</td>											
 	                                        </tr>
-	                                        <tr>
-	                                        	<td><a (click)="openLedger();">Address1</a></td>
-	                                        	<td>County1</td>
-	                                        	<td>State1</td>	
-	                                        	<td>12</td>												
-	                                        </tr>	                                      
+	                                                                            
 	                                    </tbody>
 	                                </table>
 

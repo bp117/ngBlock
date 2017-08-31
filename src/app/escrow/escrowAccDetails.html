@@ -6,34 +6,24 @@
 	                                <h4 class="title">Escrow Account Details</h4>
 	                                <p class="category">Customer Escrow Account Details</p>
 	                            </div>
-	                            <div class="card-content table-responsive">
+								
+	                            <div class="card-content table-responsive" >
 	                                <table class="table">	                               
-	                                    <thead class="text-primary">
+	                                   <thead class="text-primary">
 	                                   		 <th>Account Number</th>
 	                                    	<th>Amount Debited</th>
 	                                    	<th>Date Debited</th>	  
 	                                    	<th>Tax %</th>	                                  												
 	                                    </thead>
 	                                    <tbody>
-	                                        <tr>
-	                                       		 <td class="text-primary">91230458761097</td>
-	                                        	<td class="text-primary">$36,738</td>
-	                                        	<td class="text-primary">8/1/2017</td>	  
-	                                        	<td>7</td>	                                      	
+	                                        <tr *ngFor="let d of acctList">
+	                                       		 <td class="text-primary">{{d.escrowId}}</td>
+	                                        	<td class="text-primary">{{d.amtDebited}}</td>
+	                                        	<td class="text-primary">{{d.date}}</td>	  
+	                                        	<td>{{d.tax}}</td>	                                      	
 												
 	                                        </tr>
-	                                        <tr>
-	                                        	<td class="text-primary">91230458761097</td>
-	                                        	<td class="text-primary">$370</td>
-	                                        	<td class="text-primary">7/12/2017</td>	   
-	                                        	<td>10</td>	                                     												
-	                                        </tr>
-	                                        <tr>
-	                                        	<td class="text-primary">91230458761097</td>
-	                                        	<td class="text-primary">$36</td>
-	                                        	<td class="text-primary">8/2/2017</td>	 
-	                                        	<td>11</td>	                                       													
-	                                        </tr>
+	                                       
 	                                       
 	                                    </tbody>
 	                                </table>

@@ -12,9 +12,9 @@
 	                                        
 	                                     
 									       <label for="s1">State</label>
-											    <select id="s1" class="form-control" name="state" (change)="getCountyList($item)" ngModel>
-											      <option *ngFor="let state of states" [value]="state.value">
-														{{ state.viewValue }} <option>
+											    <select id="s1" class="form-control" name="state" (change)="getCountyList($event.target.value)"  ngModel>
+											      <option *ngFor="let state of statesList" [value]="state.state_name">
+														{{ state.state_name }} <option>
 											    </select>
 	                                        </div>
 	                                    </div>
@@ -23,8 +23,8 @@
 	                                         <div class="col-md-6 dropdown">
 	                                           <label for="s1">County</label>
 											    <select id="s1" class="form-control" name="county" (change)="change($event)" ngModel>
-											      <option *ngFor="let county of counties" [value]="county.value">
-														{{ county.viewValue }}  <option>
+											      <option *ngFor="let county of counties" [value]="county">
+														{{ county }}  <option>
 											    </select>
 	                                        </div>	                                
 	                                    </div>
@@ -40,7 +40,7 @@
 	                                 	<button type="submit" class="btn btn-primary pull-right" (click)="search(insuranceForm.value)">SEARCH</button>
 	                                 	
 	                                 	<div *ngIf=escrowDashboard >
-		                                	<display-escrowacc-details></display-escrowacc-details>	                                
+		                                	<display-escrowacc-details [acctList]='acctDetails'></display-escrowacc-details>	                                
 		                                </div>
 		                                
 	                                    <div class="clearfix"></div>
