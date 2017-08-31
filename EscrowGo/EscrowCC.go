@@ -36,7 +36,8 @@ type TaxFinancialInfo struct {
     TaxCurrentBalance		string		`json:"taxCurrentBalance"`
 }
 
-type EscrowApplication struct {   
+type EscrowApplication struct { 
+	EscrowId			   string				`json:"escrowId"`  
     ParcelId               string        		`json:"parcelId"`
     PropertyValue		   int					`json:"propertyValue"`
     CustomerId             string  		 		`json:"customerId"`
@@ -162,7 +163,7 @@ func (t *EscrowChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
     fmt.Println("Entering CreditIntoEscrowAccount")
 	var result EscrowApplication
-    if len(args) != 8 {
+    if len(args) != 9 {
         fmt.Println("Invalid input args")
         return nil, errors.New("Expected the escrow details for Escrow Block creation")
     }
@@ -174,31 +175,33 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
     }
     uId := string(out[:])
     var escrowApplicationId = "e_"+uId**/
-    var escrowApplicationId = args[0]
+    var escrowAppKey = args[0]
+    var escrowApplicationId = args[1]
     var bankId = "user_type1_1"
     //var escrowApplicationInput = args[1]
     //fmt.Printf("%s", out)
    
-   propVal, err := strconv.Atoi(args[2])
+   propVal, err := strconv.Atoi(args[3])
    if err != nil {
 		fmt.Println("Int conversion error: ", err)
 		return nil, err
 	}
-   curBal, err := strconv.Atoi(args[4])
+   curBal, err := strconv.Atoi(args[5])
    if err != nil {
 		fmt.Println("Int conversion error: ", err)
 		return nil, err
 	}
-   mapD := &Bank{bankId, args[5], args[6]}
+   mapD := &Bank{bankId, args[6], args[7]}
   
    var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UTC") 
    
-   result.ParcelId = args[1]
+   result.EscrowId = escrowApplicationId
+   result.ParcelId = args[2]
    result.PropertyValue = propVal
-   result.CustomerId = args[3]
+   result.CustomerId = args[4]
    result.CurrentBalance = curBal
    result.Bank = mapD
-   result.Source = args[7]
+   result.Source = args[8]
    result.Status = statusType[0]
    result.LastModifiedDate = dTime 
     
@@ -212,7 +215,6 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 							 statusType[0],
 							 dTime,
 						 }**/
-	
 	//ajson, err := json.Marshal(escrowApplicationInput)
 	ajson, err := json.MarshalIndent(result, "", " ")
 	if err != nil {
@@ -220,7 +222,9 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 		return nil, err
 	}
 	 
-    err = stub.PutState(escrowApplicationId, []byte(ajson))
+
+    err = stub.PutState(escrowAppKey, []byte(ajson))
+
     if err != nil {
         fmt.Println("Could not save escrow application to ledger", err)
         return nil, err
@@ -242,10 +246,13 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 	 fmt.Println("Entering PerformEscrowTaxDeduction")
 	var result EscrowApplication 
 	
-	var escrowApplicationId = args[0]
-    bytes, err := stub.GetState(escrowApplicationId)
+	var escrowAppKey = args[0]
+	var escrowAppKeyPrev = args[1]
+	var escrowApplicationId = args[2]
+    bytes, err := stub.GetState(escrowAppKeyPrev)
     if err != nil {
         fmt.Println("Could not fetch escrow application with id "+escrowApplicationId+" from ledger", err)
+        fmt.Println("Int conversion error: ", bytes)
         return nil, err
     }
 	 
@@ -259,36 +266,36 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 	
 	var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UTC")
 	var taxId = "user_type1_2"
-	taxPer, err := strconv.Atoi(args[2])
+	taxPer, err := strconv.Atoi(args[4])
     if err != nil {
 		fmt.Println("Int conversion error: ", err)
 		return nil, err
 	}
     
-    frequency, err := strconv.Atoi(args[4])
+    frequency, err := strconv.Atoi(args[6])
     if err != nil {
 		fmt.Println("Int conversion error: ", err)
 		return nil, err
 	}
     
-    taxCurBal, err := strconv.Atoi(ea.TaxFinancialInfo.TaxCurrentBalance)
-    if err != nil {
-		fmt.Println("Int conversion error: ", err)
-		return nil, err
-	}
+  //  taxCurBal, err := strconv.Atoi(ea.TaxFinancialInfo.TaxCurrentBalance)
+   // if err != nil {
+	//	fmt.Println("Int conversion error: ", err)
+		var taxCurBal = 0
+	//}
 	
 	var amtCredited = (taxPer * ea.PropertyValue) / 100
 	var taxBal = taxCurBal + amtCredited
 	amtC := strconv.Itoa(amtCredited)
 	taxCB := strconv.Itoa(taxBal)
-	mapT := &TaxFinancialInfo{taxId, args[1], taxPer, args[3], frequency, amtC, taxCB}
+	mapT := &TaxFinancialInfo{taxId, args[3], taxPer, args[5], frequency, amtC, taxCB}
 	 
    result.ParcelId = ea.ParcelId
    result.PropertyValue = ea.PropertyValue
    result.CustomerId = ea.CustomerId
    result.CurrentBalance = ea.CurrentBalance
    result.TaxFinancialInfo = mapT
-   result.Source = args[5]
+   result.Source = args[7]
    result.Status = statusType[1]
    result.LastModifiedDate = dTime
 	
@@ -298,7 +305,9 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 		return nil, err
 	}
 	
-	err = stub.PutState(escrowApplicationId, []byte(ajson))
+
+	err = stub.PutState(escrowAppKey, []byte(ajson))
+
     if err != nil {
         fmt.Println("Could not save escrow application to ledger", err)
         return nil, err
@@ -319,6 +328,139 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 
 func EscrowAmountManualCredit(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	 fmt.Println("Entering EscrowAmountManualCredit")
+	 var result EscrowApplication
+	 var tresult EscrowApplication
+	var escrowAppKey = args[0]
+	var escrowAppKey2 = "escrowId4"
+	var escrowAppKeyPrev = args[1]
+	var escrowApplicationId = args[2]
+    var userId = "user_type1_0"
+    //var escrowApplicationInput = args[1]
+    //fmt.Printf("%s", out)
+  
+   propVal, err := strconv.Atoi(args[4])
+   if err != nil {
+		fmt.Println("Int conversion error: ", err)
+		return nil, err
+	}
+   amtCredited, err := strconv.Atoi(args[6])
+   if err != nil {
+		fmt.Println("Int conversion error: ", err)
+		return nil, err
+	}
+   //mapD := &Bank{bankId, args[5], args[6]}
+    var curBal = 0 + amtCredited
+   var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UTC") 
+   
+   result.ParcelId = args[3]
+   result.PropertyValue = propVal
+   result.CustomerId = userId
+   result.CurrentBalance = curBal
+   //result.Bank = mapD
+   result.Source = args[7]
+   result.Status = statusType[2]
+   result.LastModifiedDate = dTime 
+    
+	/**escrowApplicationInput := EscrowApplication {							 
+							 args[1],
+							 propVal,
+							 args[3],
+							 curBal,
+							 mapD,
+							 args[7],
+							 statusType[0],
+							 dTime,
+						 }**/
+	
+	//ajson, err := json.Marshal(escrowApplicationInput)
+	ajson, err := json.MarshalIndent(result, "", " ")
+	if err != nil {
+		fmt.Println("toJSON error: ", err)
+		return nil, err
+	}
+	 
+    err = stub.PutState(escrowAppKey, []byte(ajson))
+    if err != nil {
+        fmt.Println("Could not save escrow application to ledger", err)
+        return nil, err
+    }
+    fmt.Println("-------Successfully performed Manual Credit first step.------")
+    
+    fmt.Println("-------Starting Tax deduction.------")
+    
+     bytes, err := stub.GetState(escrowAppKeyPrev)
+    if err != nil {
+        fmt.Println("Could not fetch escrow application with id "+escrowApplicationId+" from ledger", err)
+        fmt.Println("Int conversion error: ", bytes)
+        return nil, err
+    }
+	 
+	ea :=  EscrowApplication{}
+	
+	if err := json.Unmarshal(bytes, &ea); err != nil {
+        fmt.Println("JSON to EscrowApplication error: ", err)
+		return nil, err
+    }
+	
+	
+	var nTime = time.Now().UTC().Format("2006-01-02 15:04:05 UTC")
+	var taxId = "user_type1_2"
+	taxPer, err := strconv.Atoi(args[8])
+    if err != nil {
+		fmt.Println("Int conversion error: ", err)
+		return nil, err
+	}
+    
+   
+    
+    taxCurBal, err := strconv.Atoi(ea.TaxFinancialInfo.TaxCurrentBalance)
+    if err != nil {
+		fmt.Println("Int conversion error: ", err)
+		taxCurBal = 200
+	}
+	
+	var taxAmtCredit = (taxPer * ea.PropertyValue) / 100
+	var taxBal = taxCurBal + taxAmtCredit
+	amtC := strconv.Itoa(amtCredited)
+	taxCB := strconv.Itoa(taxBal)
+	mapT := &TaxFinancialInfo{taxId, ea.TaxFinancialInfo.TaxAuthorityName, taxPer, ea.TaxFinancialInfo.StartDate, ea.TaxFinancialInfo.Frequency, amtC, taxCB}
+	 
+   tresult.ParcelId = ea.ParcelId
+   tresult.PropertyValue = ea.PropertyValue
+   tresult.CustomerId = ea.CustomerId
+   tresult.CurrentBalance = ea.CurrentBalance
+   tresult.TaxFinancialInfo = mapT
+   tresult.Source = args[7]
+   tresult.Status = statusType[1]
+   tresult.LastModifiedDate = nTime
+	
+	njson, err := json.MarshalIndent(tresult, "", " ")
+	if err != nil {
+		fmt.Println("toJSON error: ", err)
+		return nil, err
+	}
+	
+	err = stub.PutState(escrowAppKey2, []byte(njson))
+    if err != nil {
+        fmt.Println("Could not save escrow application to ledger", err)
+        return nil, err
+    }
+    
+    
+    var event = escrowEvent{"CreditIntoEscrowAccount", "Successfully created escrow application with ID " + escrowApplicationId}
+    eventBytes, err := json.Marshal(&event)
+    
+   
+    if err != nil {
+        return nil, err
+    }
+    
+    fmt.Println("Successfully saved escrow application")
+    return eventBytes, nil
+	 
+	 fmt.Println("Successfully performed Manual Credit")
+	 
+	 
 	return nil, nil
 }
 
