@@ -152,10 +152,10 @@ export class DataService {
   }
 
   updateDocument(obj:any){
-    this.db.put({
+  /*  this.db.put({
       _id:"countyProperties",
-      
-    })
+
+    })*/
   }
  
   handleChange(change:any){
