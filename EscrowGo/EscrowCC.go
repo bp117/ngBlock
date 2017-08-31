@@ -472,8 +472,8 @@ func GetLastTransaction(stub shim.ChaincodeStubInterface, args []string) ([]byte
         return nil, errors.New("Missing Escrow application ID")
     }
  
-    var escrowApplicationId = args[0]
-    bytes, err := stub.GetState(escrowApplicationId)
+    var escrowAppKey = args[0]
+    bytes, err := stub.GetState(escrowAppKey)
     if err != nil {
         fmt.Println("Could not fetch escrow application with id "+escrowApplicationId+" from ledger", err)
         return nil, err
