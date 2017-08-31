@@ -15,7 +15,7 @@
 	                                    </thead>
 	                                    <tbody>
 	                                        <tr *ngFor="let d of addrList">
-	                                        	<td><a  (click)="openLedger();">{{d.Address}}</a></td>
+	                                        	<td><a  (click)="openLedger(d);">{{d.Address}}</a></td>
 	                                        	<td>{{d.county}}</td>
 	                                        	<td>{{d.state}}</td>	
 	                                        	<td>{{d.tax}}</td>											
@@ -29,6 +29,6 @@
 	                    </div>	                   
 	                </div>
 	                <div *ngIf=ledgerFormVisible >
-	              		  <display-ledger-modal></display-ledger-modal>
+	              		  <display-ledger-modal [data]='taxDeduction'></display-ledger-modal>
 	                </div>
 	            

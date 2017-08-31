@@ -10,15 +10,17 @@ import { DataService } from '../shared/data.service';
 export class SearchComponent{
  @Input() addrList :any;  
    messages: any = []; 
+   taxDeduction:any;
   ledgerFormVisible : boolean = false;
     address : any =[];
    
     i:any;
     
    
-    openLedger(){
+    openLedger(value:any){
         this.ledgerFormVisible = true;
-        console.log("testing ledger");
+        console.log("testing ledger",value);
+         this.taxDeduction=value;
 
     }
      ngOnChanges(){

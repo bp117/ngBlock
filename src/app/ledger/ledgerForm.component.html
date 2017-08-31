@@ -5,11 +5,12 @@
 	                                <h4 class="title">Ledger Form</h4>
 									<p class="category">Send the info to Ledger</p>
 	                            </div>
-	                            <div class="card-content">	                                
+	                            <div class="card-content">
+									 <form #customerForm="ngForm" (ngSubmit)="onSubmit(customerForm.value)">	                                
 	                                    <div class="row">
 	                                         <div class="col-md-6 dropdown">	                                     
 									       <label for="s1">Frequency </label>
-											    <select id="s1" class="form-control" name="frequency" (change)="change($event)" ngModel>
+											    <select id="s1" class="form-control" name="frequency" (change)="change($event)" [(ngModel)]="data.taxDecduction.frequency">
 											      <option *ngFor="let frequency of frequencies" [value]="frequency.value">
 											    	  {{ frequency.viewValue }} <option>
 											    </select>
@@ -20,11 +21,13 @@
 	                                        <div class="col-md-5">
 												<div class="form-group label-floating">
 													<label class="control-label">When to Start</label>
-													<md-input-container>
-													  <input mdInput [mdDatepicker]="picker" placeholder="Choose a date">
+													<!--<md-input-container>
+													  <input mdInput [mdDatepicker]="picker" placeholder="Choose a date" ngModel>
 													  <button mdSuffix [mdDatepickerToggle]="picker"></button>
-													</md-input-container>
-													<md-datepicker #picker></md-datepicker>
+													</md-input-container>-->
+
+														<input type="text" name="startDt"  class="form-control" [(ngModel)]="data.taxDecduction.startDt">
+												<!--	<md-datepicker #picker></md-datepicker>-->
 												</div>
 	                                        </div>	
 	                                     </div>  
@@ -33,7 +36,7 @@
 	                                        <div class="col-md-12">
 												<div class="form-group label-floating">
 													<label class="control-label">Interest Rate (%)</label>
-													<input type="text" name="amountTransfer" ngModel class="form-control" >
+													<input type="text" name="amountTransfer"  class="form-control" [(ngModel)]="data.taxDecduction.taxPercent">
 												</div>
 	                                        </div>
 	                                    </div>
@@ -42,7 +45,7 @@
 	                                    <div class="clearfix">
 	                                    <b>Note :</b> This information will send to the Ledger.
 	                                    </div>
-	                               
+	                                </form>
 	                            </div>
 	                        </div>
 	                    </div>
