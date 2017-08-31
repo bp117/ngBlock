@@ -9,6 +9,10 @@ import { NgForm }  from '@angular/forms';
 export class CustomerFormComponent {
         constructor() { }
        balance : any = 10000;    
+       escrowAccId : any = 45791;
+        taxPercnt : any = 2;
+    
+    
  
       accTypes  = [
         {viewValue: 'Savings', value: 'Savings Acc'},

@@ -25,6 +25,7 @@ import {TestComponent} from "./testcomponent/testComponent.component";
 
 import {HeaderModule} from "./header/header.module";
 import {SideNavModule} from "./sidenav/sidenav.module";
+import {NotificationModule} from "./notification/notification.module";
 
 import {InsurenceFormComponent} from "./taxmanagement/insurenceForm.component";
 import {CustomerDashboardComponent} from "./dashboard/customer-dashboard/customerdashboard.component";
