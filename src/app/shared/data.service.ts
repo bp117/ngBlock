@@ -93,6 +93,31 @@ export class DataService {
   deleteDocument(id:any) {
     this.db.remove(id);
   }
+  getStates(){
+    return new Promise(resolve => {
+    this.db.get("states").then(function (response:any) {
+     
+    //  this.data = response;
+        resolve(response);
+
+}).catch(function (err:any) {
+  console.log(err);
+});
+});
+  }
+
+    getEscrowAcctDetails(){
+    return new Promise(resolve => {
+    this.db.get("countyProperties").then(function (response:any) {
+     
+    //  this.data = response;
+        resolve(response);
+
+}).catch(function (err:any) {
+  console.log(err);
+});
+});
+  }
 
   getDocuments() {
     return new Promise(resolve => {

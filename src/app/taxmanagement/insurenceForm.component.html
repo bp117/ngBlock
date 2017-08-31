@@ -9,12 +9,15 @@
 	                                <form #insuranceForm="ngForm" (ngSubmit)="onSubmit(insuranceForm.value)">
 	                                    <div class="row">
 	                                        <div class="col-md-6 dropdown">
+
+	                                            <label for="s1">State</label>
+											    <select id="s1" class="form-control" name="state" (change)="getCountyList($event.target.value)"  ngModel>
+											      <option *ngFor="let state of statesList" [value]="state.state_name">
+														{{ state.state_name }} <option>
+
 	                                        
-	                                     
-									       <label for="s1">State</label>
-											    <select id="s1" class="form-control" name="state" (change)="getCountyList($item)" ngModel>
-											      <option *ngFor="let state of states" >
-														{{ state }} <option>
+	                                   
+
 											    </select>
 	                                        </div>
 	                                    </div>
@@ -23,9 +26,11 @@
 	                                         <div class="col-md-6 dropdown">
 	                                           <label for="s1">County</label>
 											    <select id="s1" class="form-control" name="county" (change)="change($event)" ngModel>
-											       <option *ngFor="let county of counties" [value]="county.countyName">
-														{{ county.countyName }}  <option>
-											    </select>											    
+
+											      <option *ngFor="let county of counties" [value]="county">
+														{{ county }}  <option>
+											    </select>
+
 	                                        </div>	                                
 	                                    </div>
 	                                    <!-- <div class="row">
@@ -40,7 +45,7 @@
 	                                 	<button type="submit" class="btn btn-primary pull-right" (click)="search(insuranceForm.value)">SEARCH</button>
 	                                 	
 	                                 	<div *ngIf=tableVisible >
-		                                	<display-table></display-table>		                                
+		                                	<display-table [addrList]="addrDetails"></display-table>		                                
 		                                </div>		                               
 	                                    <div class="clearfix"></div>
 	                                     

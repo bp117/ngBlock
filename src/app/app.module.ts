@@ -1,3 +1,4 @@
+import { DataService } from './shared/data.service';
 import {NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
 import { FormsModule }    from '@angular/forms';
@@ -30,6 +31,8 @@ import {NotificationModule} from "./notification/notification.module";
 import {InsurenceFormComponent} from "./taxmanagement/insurenceForm.component";
 import {CustomerDashboardComponent} from "./dashboard/customer-dashboard/customerdashboard.component";
 import {PersonDashboardComponent} from "./dashboard/person-dashboard/persondashboard.component";
+
+
 @NgModule({
     imports: [BrowserModule,FormsModule, BrowserAnimationsModule,AppRoutingModule,MaterialModule,
     MdDatepickerModule,MdNativeDateModule,HeaderModule,SideNavModule,HttpModule
@@ -37,7 +40,13 @@ import {PersonDashboardComponent} from "./dashboard/person-dashboard/persondashb
     declarations: [AppComponent, HomeComponent, Reverseletters,NotificationComponent,
     HeaderComponent,FooterComponent,SideNavComponent,PersonComponent,
     LedgerFormComponent,SearchComponent,InsurenceFormComponent,CustomerDashboardComponent,PersonDashboardComponent,
+
     EscrowAccDetailsComponent,EscrowInsurenceFormComponent],
+    
+  providers: [
+    DataService
+  ],
+
     bootstrap: [AppComponent]
 })
 export class AppModule {}

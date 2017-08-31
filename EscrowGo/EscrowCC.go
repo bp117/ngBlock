@@ -222,7 +222,9 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 		return nil, err
 	}
 	 
+
     err = stub.PutState(escrowAppKey, []byte(ajson))
+
     if err != nil {
         fmt.Println("Could not save escrow application to ledger", err)
         return nil, err
@@ -303,7 +305,9 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 		return nil, err
 	}
 	
+
 	err = stub.PutState(escrowAppKey, []byte(ajson))
+
     if err != nil {
         fmt.Println("Could not save escrow application to ledger", err)
         return nil, err

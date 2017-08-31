@@ -1,3 +1,4 @@
+
 import {Component,OnInit} from "@angular/core";
 import {Observable} from 'rxjs/Rx';
 
@@ -65,4 +66,5 @@ export class AppComponent implements OnInit {
         console.log("propertyEscrow   ",data[6].propertyEscrow.escrowAcctId);                   
         }
 */
+
 }
