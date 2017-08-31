@@ -21,7 +21,7 @@ import {SearchComponent} from "./taxmanagement/search.component";
 import {EscrowAccDetailsComponent} from "./escrow/escrowAccDetails.component";
 import {EscrowInsurenceFormComponent} from "./escrow/escrowinsurenceForm.component";
 
-import {TestComponent} from "./testcomponent/testComponent.component";
+//import {TestComponent} from "./testcomponent/testComponent.component";
 
 import {HeaderModule} from "./header/header.module";
 import {SideNavModule} from "./sidenav/sidenav.module";
@@ -37,7 +37,7 @@ import {PersonDashboardComponent} from "./dashboard/person-dashboard/persondashb
     declarations: [AppComponent, HomeComponent, Reverseletters,NotificationComponent,
     HeaderComponent,FooterComponent,SideNavComponent,PersonComponent,
     LedgerFormComponent,SearchComponent,InsurenceFormComponent,CustomerDashboardComponent,PersonDashboardComponent,
-    EscrowAccDetailsComponent,EscrowInsurenceFormComponent,TestComponent],
+    EscrowAccDetailsComponent,EscrowInsurenceFormComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

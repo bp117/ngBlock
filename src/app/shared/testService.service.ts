@@ -10,7 +10,7 @@ declare var webContextRef: string;
 export class TestService {
         
    
-	private _add_service_details_url = webContextRef+'/svcadmin/add_domain';
+	private _url = 'https://f29f39c507cd43639862ec95802fbb0e-vp0.us.blockchain.ibm.com:5004/';
     
     constructor (private http: Http) {}
     
@@ -20,7 +20,7 @@ export class TestService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         let body = JSON.stringify(data);
-        return this.http.put('/api/data/', body, options ).map((res: Response) => res.json());
+        return this.http.put(this._url, body, options ).map((res: Response) => res.json());
     
     }   
 	
