@@ -115,7 +115,7 @@ export class DataService {
           true}).on('change', (change:any) => {
               this.handleChange(change);
         });
-
+ //console.log("this.this.data ",this.data); 
       }).catch((error:any) => {
  
         console.log(error);

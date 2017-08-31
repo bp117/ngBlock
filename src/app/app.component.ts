@@ -1,29 +1,40 @@
 import {Component} from "@angular/core";
-import { DataService } from './shared/data.service';
+
 
 @Component({
     selector: "myroute-app",
-    templateUrl: './dashboard.html'  ,
-    providers: [DataService],
+    templateUrl: './dashboard.html'
+   
 })
 export class AppComponent{
         messages: any = [];
-    constructor(public dataService: DataService){  
+    constructor(){  
     }  
        
     ngOnInit() {      
-         this.dataService.initCall();
+         //this.dataService.initCall();
         
      }
     
-    ngAfterViewInit() {
+   /* ngAfterViewInit() {
         console.log("ngAfterViewInit Method");
         this.dataService.getDocuments().then((data) => {
-                this.messages = data;  
+                this.messages = data;
+             console.log("this.messages ",this.messages);  
+                 this.assignValues(this.messages);
         }).catch((ex) => {
                 console.error('Error fetching users', ex);
         });
 
      }
-
+    assignValues(data:any){
+        console.log("COunties couontyName  ",data[0].counties.countyName); 
+        console.log("properties address  ",data[1].properties.address);     
+         console.log("orgs address  ",data[2].orgs.orgType);     
+         console.log("Customers address  ",data[3].Customers.firstName+data[3].Customers.lastName);     
+         console.log("notifications   ",data[4].notifications.msg);     
+         console.log("states   ",data[5].states); 
+        console.log("propertyEscrow   ",data[6].propertyEscrow.escrowAcctId);                   
+        }
+*/
 }
