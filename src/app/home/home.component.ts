@@ -6,7 +6,8 @@ import { TestService } from '../shared/testService.service';
 @Component({
     selector: 'home-page',
     templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css']
+    styleUrls: ['./home.component.css'],
+    providers :[TestService]
 })
 export class HomeComponent {
 
