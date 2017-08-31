@@ -30,27 +30,30 @@
 	                                </table>
 	                                <table width="500" border="2" align="left" cellpadding="0" cellspacing="0">
 	                                 <thead class="text-primary">
-	                                    	<th>Amount Credited</th>
-	                                    	<th>Date Credited</th>
-	                                    	<th>To Bank </th>											
+	                                 		<th>EscrowId</th>
+	                                    	<th>ParcelId</th>
+	                                    	<th>PropertyValue</th>
+	                                    	<th>CustomerId </th>
+	                                    	<th>CurrentBalance</th>
+	                                    	<th>BankName </th>
+	                                    	<th>LastModifiedDate </th>
+	                                    	<th>AmountCredited </th>											
 	                                    </thead>
-	                                    <tbody>
+	                                   
+											 
+	                                    <tbody *ngFor="let hero of j">
 	                                        <tr>
-	                                        	<td class="text-primary">$3738</td>
-	                                        	<td class="text-primary">8/2/2017</td>
-	                                        	<td>Oud-Turnhout</td>
+	                                        	<td class="text-primary">EscrowId1</td>
+	                                        	<td class="text-primary">{{hero.parcelId}}</td>
+	                                        	<td class="text-primary">{{hero.propertyValue}}</td>
+	                                        	<td class="text-primary">{{hero.customerId}}</td>
+	                                        	<td class="text-primary">{{hero.currentBalance}}</td>
+	                                        	<td class="text-primary">{{hero.bank.name}}</td>
+	                                        	<td class="text-primary">{{hero.lastModifiedDate}}</td>
+	                                        	<td class="text-primary">{{hero.bank.amountCredited}}</td>
 												
 	                                        </tr>
-	                                        <tr>
-	                                        	<td class="text-primary">$36</td>
-	                                        	<td class="text-primary">7/14/2017</td>
-	                                        	<td>Sinaai-Waas</td>												
-	                                        </tr>
-	                                        <tr>
-	                                        	<td class="text-primary">$3</td>
-	                                        	<td class="text-primary">8/2/2017</td>
-	                                        	<td>Baileux</td>												
-	                                        </tr>
+	                                       
 	                                       
 	                                    </tbody>
 	                                
