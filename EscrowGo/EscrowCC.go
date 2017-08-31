@@ -215,7 +215,6 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 							 statusType[0],
 							 dTime,
 						 }**/
-	
 	//ajson, err := json.Marshal(escrowApplicationInput)
 	ajson, err := json.MarshalIndent(result, "", " ")
 	if err != nil {
