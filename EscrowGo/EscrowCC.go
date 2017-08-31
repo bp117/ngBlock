@@ -243,7 +243,7 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 							 "NA",
 							 bankId,
 							 args[6],
-							 args[7]
+							 args[7],
 							 args[8],
 							 statusType[0],
 							 dTime,
@@ -346,7 +346,7 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 							 taxCB,
 							 "NA",
 							 "NA",
-							 "NA"
+							 "NA",
 							 args[5],
 							 statusType[0],
 							 dTime,
