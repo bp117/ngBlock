@@ -13,8 +13,8 @@
 	                                     
 									       <label for="s1">State</label>
 											    <select id="s1" class="form-control" name="state" (change)="getCountyList($item)" ngModel>
-											      <option *ngFor="let state of states" [value]="state.value">
-														{{ state.viewValue }} <option>
+											      <option *ngFor="let state of states" >
+														{{ state }} <option>
 											    </select>
 	                                        </div>
 	                                    </div>
@@ -23,9 +23,9 @@
 	                                         <div class="col-md-6 dropdown">
 	                                           <label for="s1">County</label>
 											    <select id="s1" class="form-control" name="county" (change)="change($event)" ngModel>
-											      <option *ngFor="let county of counties" [value]="county.value">
-														{{ county.viewValue }}  <option>
-											    </select>
+											       <option *ngFor="let county of counties" [value]="county.countyName">
+														{{ county.countyName }}  <option>
+											    </select>											    
 	                                        </div>	                                
 	                                    </div>
 	                                    <!-- <div class="row">
