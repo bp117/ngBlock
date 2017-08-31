@@ -272,11 +272,11 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 		return nil, err
 	}
     
-    taxCurBal, err := strconv.Atoi(ea.TaxFinancialInfo.TaxCurrentBalance)
-    if err != nil {
-		fmt.Println("Int conversion error: ", err)
+   // taxCurBal, err := strconv.Atoi(ea.TaxFinancialInfo.TaxCurrentBalance)
+  //  if err != nil {
+	//	fmt.Println("Int conversion error: ", err)
 		taxCurBal = 0
-	}
+	//}
 	
 	var amtCredited = (taxPer * ea.PropertyValue) / 100
 	var taxBal = taxCurBal + amtCredited
