@@ -186,7 +186,7 @@ func (t *EscrowChaincode) Invoke(stub shim.ChaincodeStubInterface, function stri
 /**********************************************************************************/
 func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
     fmt.Println("Entering CreditIntoEscrowAccount")
-	var result EscrowApplication
+	//var result EscrowApplication
     if len(args) != 8 {
         fmt.Println("Invalid input args")
         return nil, errors.New("Expected the escrow details for Escrow Block creation")
@@ -226,10 +226,10 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
    result.Bank = mapD
    result.Source = args[7]
    result.Status = statusType[0]
-   result.LastModifiedDate = dTime *//
+   result.LastModifiedDate = dTime **/
     
 	escrowApplicationInput := EscrowApplication {	
-							 escrowApplicationId						 
+							 escrowApplicationId,						 
 							 args[2],
 							 propVal,
 							 args[4],
@@ -276,7 +276,7 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
 
 func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) ([]byte, error) {
 	 fmt.Println("Entering PerformEscrowTaxDeduction")
-	var result EscrowApplication 
+	//var result EscrowApplication 
 	
 	var escrowAppKey = args[0]
 	var escrowApplicationId = args[1]
@@ -332,7 +332,7 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 	ajson, err := json.MarshalIndent(result, "", " ")**/
    
    escrowApplicationInput := EscrowApplication {	
-							 escrowApplicationId						 
+							 escrowApplicationId,						 
 							 ea.ParcelId,
 							 ea.PropertyValue,
 							 ea.CustomerId,
