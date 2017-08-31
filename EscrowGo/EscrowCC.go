@@ -60,11 +60,11 @@ type EscrowApplication struct {
     TaxPercentage          int 					`json:"taxPercentage"`
     StartDate   		   string 				`json:"startDate"`
     Frequency 			   int 					`json:"frequency"`
-    AmountCredited		   string				`json:"amountCredited"`
+    TaxAmountCredited		string				`json:"taxAmountCredited"`
     TaxCurrentBalance	   string				`json:"taxCurrentBalance"`
     BankId				   string				`json:"bankId"`
 	Name				   string				`json:"name"`
-	AmountCredited		   string				`json:"amountCredited"`
+	BankAmountCredited		string				`json:"bankAmountCredited"`
     Source                 string        		`json:"source"`
     Status				   string				`json:"status"`
     LastModifiedDate       string       		`json:"lastModifiedDate"`
@@ -318,7 +318,7 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
 	var taxBal = taxCurBal + amtCredited
 	amtC := strconv.Itoa(amtCredited)
 	taxCB := strconv.Itoa(taxBal)
-	mapT := &TaxFinancialInfo{taxId, args[2], taxPer, args[4], frequency, amtC, taxCB}
+	//mapT := &TaxFinancialInfo{taxId, args[2], taxPer, args[4], frequency, amtC, taxCB}
 	 
    /**result.ParcelId = ea.ParcelId
    result.PropertyValue = ea.PropertyValue
