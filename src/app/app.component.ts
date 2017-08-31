@@ -37,12 +37,13 @@ export class AppComponent implements OnInit {
            
          }
     ngOnInit() {      
-         this.testService.postData(this.data);
+         console.log("ngOnInit");
+         this.postData(this.data);
         
      }
      
   postData(data : any) {
-        console.error("Post Data Method");
+        console.log("Post Data Method");
         
             this.testService.postData(this.data).subscribe(
                data =>        
