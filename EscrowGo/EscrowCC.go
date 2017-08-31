@@ -195,7 +195,7 @@ func CreditIntoEscrowAccount(stub shim.ChaincodeStubInterface, args []string) ([
   
    var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UTC") 
    
-   results.EscrowId = escrowApplicationId
+   result.EscrowId = escrowApplicationId
    result.ParcelId = args[2]
    result.PropertyValue = propVal
    result.CustomerId = args[4]
@@ -280,7 +280,7 @@ func PerformEscrowTaxDeduction(stub shim.ChaincodeStubInterface, args []string) 
   //  taxCurBal, err := strconv.Atoi(ea.TaxFinancialInfo.TaxCurrentBalance)
    // if err != nil {
 	//	fmt.Println("Int conversion error: ", err)
-		taxCurBal = 0
+		var taxCurBal = 0
 	//}
 	
 	var amtCredited = (taxPer * ea.PropertyValue) / 100
@@ -346,7 +346,7 @@ func EscrowAmountManualCredit(stub shim.ChaincodeStubInterface, args []string) (
 		return nil, err
 	}
    //mapD := &Bank{bankId, args[5], args[6]}
-    curBal = 0 + amtCredited
+    var curBal = 0 + amtCredited
    var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UTC") 
    
    result.ParcelId = args[3]
@@ -400,7 +400,7 @@ func EscrowAmountManualCredit(stub shim.ChaincodeStubInterface, args []string) (
     }
 	
 	
-	var dTime = time.Now().UTC().Format("2006-01-02 15:04:05 UTC")
+	var nTime = time.Now().UTC().Format("2006-01-02 15:04:05 UTC")
 	var taxId = "user_type1_2"
 	taxPer, err := strconv.Atoi(args[8])
     if err != nil {
@@ -416,8 +416,8 @@ func EscrowAmountManualCredit(stub shim.ChaincodeStubInterface, args []string) (
 		taxCurBal = 200
 	}
 	
-	var amtCredited = (taxPer * ea.PropertyValue) / 100
-	var taxBal = taxCurBal + amtCredited
+	var taxAmtCredit = (taxPer * ea.PropertyValue) / 100
+	var taxBal = taxCurBal + taxAmtCredit
 	amtC := strconv.Itoa(amtCredited)
 	taxCB := strconv.Itoa(taxBal)
 	mapT := &TaxFinancialInfo{taxId, ea.TaxFinancialInfo.TaxAuthorityName, taxPer, ea.TaxFinancialInfo.StartDate, ea.TaxFinancialInfo.Frequency, amtC, taxCB}
@@ -429,15 +429,15 @@ func EscrowAmountManualCredit(stub shim.ChaincodeStubInterface, args []string) (
    tresult.TaxFinancialInfo = mapT
    tresult.Source = args[7]
    tresult.Status = statusType[1]
-   tresult.LastModifiedDate = dTime
+   tresult.LastModifiedDate = nTime
 	
-	ajson, err := json.MarshalIndent(tresult, "", " ")
+	njson, err := json.MarshalIndent(tresult, "", " ")
 	if err != nil {
 		fmt.Println("toJSON error: ", err)
 		return nil, err
 	}
 	
-	err = stub.PutState(escrowAppKey2, []byte(ajson))
+	err = stub.PutState(escrowAppKey2, []byte(njson))
     if err != nil {
         fmt.Println("Could not save escrow application to ledger", err)
         return nil, err
