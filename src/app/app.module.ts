@@ -22,10 +22,11 @@ import {SearchComponent} from "./taxmanagement/search.component";
 import {EscrowAccDetailsComponent} from "./escrow/escrowAccDetails.component";
 import {EscrowInsurenceFormComponent} from "./escrow/escrowinsurenceForm.component";
 
-import {TestComponent} from "./testcomponent/testComponent.component";
+//import {TestComponent} from "./testcomponent/testComponent.component";
 
 import {HeaderModule} from "./header/header.module";
 import {SideNavModule} from "./sidenav/sidenav.module";
+import {NotificationModule} from "./notification/notification.module";
 
 import {InsurenceFormComponent} from "./taxmanagement/insurenceForm.component";
 import {CustomerDashboardComponent} from "./dashboard/customer-dashboard/customerdashboard.component";
@@ -39,11 +40,13 @@ import {PersonDashboardComponent} from "./dashboard/person-dashboard/persondashb
     declarations: [AppComponent, HomeComponent, Reverseletters,NotificationComponent,
     HeaderComponent,FooterComponent,SideNavComponent,PersonComponent,
     LedgerFormComponent,SearchComponent,InsurenceFormComponent,CustomerDashboardComponent,PersonDashboardComponent,
-    EscrowAccDetailsComponent,EscrowInsurenceFormComponent,TestComponent],
+
+    EscrowAccDetailsComponent,EscrowInsurenceFormComponent],
     
   providers: [
     DataService
   ],
+
     bootstrap: [AppComponent]
 })
 export class AppModule {}
